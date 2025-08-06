@@ -2,6 +2,20 @@
 name = "amazon-spapi"
 version = "0.1.1"
 edition = "2021"
+description = "A Rust client library for Amazon Selling Partner API (SP-API)"
+license = "MIT"
+repository = "https://github.com/houxd/amazon-spapi"
+homepage = "https://github.com/houxd/amazon-spapi"
+documentation = "https://docs.rs/amazon-spapi"
+keywords = ["amazon", "spapi", "api", "e-commerce", "selling-partner"]
+categories = ["api-bindings", "web-programming::http-client"]
+authors = ["Your Name <your.email@example.com>"]
+exclude = [
+    "examples/test.rs",
+    "tests/*",
+    ".github/*",
+    "*.log",
+]
 
 [lib]
 crate-type = ["lib"]
