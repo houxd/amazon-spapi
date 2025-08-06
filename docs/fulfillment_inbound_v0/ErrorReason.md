@@ -1,0 +1,13 @@
+# ErrorReason
+
+## Enum Variants
+
+| Name | Value |
+|---- | -----|
+| DoesNotExist | DoesNotExist |
+| InvalidAsin | InvalidASIN |
+
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
