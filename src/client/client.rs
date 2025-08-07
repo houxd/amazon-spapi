@@ -270,7 +270,8 @@ impl SpapiClient {
         &self.client
     }
 
-    /// Create a new configuration for the apis
+    /// Create a new configuration for the generated APIs
+    /// This function refreshes the access token and sets up the configuration
     pub async fn create_configuration(&self) -> Result<Configuration> {
         let mut headers = reqwest::header::HeaderMap::new();
         headers.insert("Content-Type", "application/json; charset=utf-8".parse()?);

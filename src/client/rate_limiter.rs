@@ -1,20 +1,64 @@
 use anyhow::Result;
 use std::collections::HashMap;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
-use tokio::time::sleep;
 use std::sync::Arc;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tokio::sync::Mutex;
+use tokio::time::sleep;
 
 use crate::client::ApiEndpoint;
+
+/// RAII guard that automatically records response when dropped
+pub struct RateLimitGuard {
+    rate_limiter: Arc<Mutex<HashMap<String, TokenBucketState>>>,
+    identifier: String,
+}
+
+impl RateLimitGuard {
+    fn new(
+        rate_limiter: Arc<Mutex<HashMap<String, TokenBucketState>>>,
+        identifier: String,
+    ) -> Self {
+        Self {
+            rate_limiter,
+            identifier,
+        }
+    }
+}
+
+impl Drop for RateLimitGuard {
+    fn drop(&mut self) {
+        let rate_limiter = self.rate_limiter.clone();
+        let identifier = self.identifier.clone();
+
+        // Spawn a task to record the response since Drop can't be async
+        tokio::spawn(async move {
+            let mut buckets = rate_limiter.lock().await;
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_secs();
+
+            if let Some(bucket) = buckets.get_mut(&identifier) {
+                bucket.last_response_time = Some(now);
+                log::trace!("Auto-recorded response time for {}: {}", identifier, now);
+            } else {
+                log::warn!(
+                    "Attempted to auto-record response for unknown endpoint: {}",
+                    identifier
+                );
+            }
+        });
+    }
+}
 
 /// State of a token bucket for rate limiting
 #[derive(Debug, Clone)]
 pub struct TokenBucketState {
     pub tokens: f64,
-    pub last_refill: u64, // Unix timestamp in seconds
+    pub last_refill: u64,                // Unix timestamp in seconds
     pub last_response_time: Option<u64>, // Unix timestamp in seconds when last response was received
-    pub rate: f64,        // requests per second
-    pub burst: u32,       // maximum burst capacity
+    pub rate: f64,                       // requests per second
+    pub burst: u32,                      // maximum burst capacity
 }
 
 /// In-memory rate limiter that manages token buckets for different endpoints
@@ -25,9 +69,21 @@ pub struct RateLimiter {
 
 impl RateLimiter {
     pub fn new() -> Self {
-        Self { 
+        Self {
             buckets: Arc::new(Mutex::new(HashMap::new())),
         }
+    }
+
+    /// Wait for a token to become available for the given endpoint and return a guard
+    /// When the guard is dropped, record_response will be called automatically
+    #[must_use = "The returned guard must be held until the API response is received"]
+    pub async fn wait(&self, identifier: &str, rate: f64, burst: u32) -> Result<RateLimitGuard> {
+        self.wait_for_token(identifier, rate, burst).await?;
+
+        Ok(RateLimitGuard::new(
+            self.buckets.clone(),
+            identifier.to_string(),
+        ))
     }
 
     /// Wait for a token to become available for the given endpoint
@@ -37,7 +93,7 @@ impl RateLimiter {
             {
                 let mut buckets = self.buckets.lock().await;
                 let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-                
+
                 // Get or create bucket for this endpoint
                 let bucket = buckets.entry(identifier.to_string()).or_insert_with(|| {
                     log::debug!("Creating new token bucket for endpoint: {}", identifier);
@@ -52,8 +108,14 @@ impl RateLimiter {
 
                 // Update bucket configuration if endpoint configuration changed
                 if (bucket.rate - rate).abs() > f64::EPSILON || bucket.burst != burst {
-                    log::info!("Updating rate limit for {}: rate {} -> {}, burst {} -> {}", 
-                        identifier, bucket.rate, rate, bucket.burst, burst);
+                    log::info!(
+                        "Updating rate limit for {}: rate {} -> {}, burst {} -> {}",
+                        identifier,
+                        bucket.rate,
+                        rate,
+                        bucket.burst,
+                        burst
+                    );
                     bucket.rate = rate;
                     bucket.burst = burst;
                 }
@@ -68,12 +130,15 @@ impl RateLimiter {
                 if let Some(last_response_time) = bucket.last_response_time {
                     let minimum_interval = 1.0 / bucket.rate; // minimum seconds between requests
                     let time_since_response = now.saturating_sub(last_response_time) as f64;
-                    
+
                     if time_since_response < minimum_interval {
                         let wait_seconds = minimum_interval - time_since_response;
-                        log::debug!("Enforcing minimum interval for {}: waiting {:.3}s since last response", 
-                            identifier, wait_seconds);
-                        
+                        log::debug!(
+                            "Enforcing minimum interval for {}: waiting {:.3}s since last response",
+                            identifier,
+                            wait_seconds
+                        );
+
                         // Release lock and wait
                         drop(buckets);
                         sleep(Duration::from_secs_f64(wait_seconds)).await;
@@ -81,23 +146,34 @@ impl RateLimiter {
                     }
                 }
 
-                log::trace!("Endpoint {}: {:.2} tokens available, rate: {}/s, burst: {}", 
-                    identifier, bucket.tokens, bucket.rate, bucket.burst);
+                log::trace!(
+                    "Endpoint {}: {:.2} tokens available, rate: {}/s, burst: {}",
+                    identifier,
+                    bucket.tokens,
+                    bucket.rate,
+                    bucket.burst
+                );
 
                 // Check if we have a token available
                 if bucket.tokens >= 1.0 {
                     bucket.tokens -= 1.0;
-                    
-                    log::debug!("Token consumed for {}, {:.2} tokens remaining", 
-                        identifier, bucket.tokens);
-                    
+
+                    log::debug!(
+                        "Token consumed for {}, {:.2} tokens remaining",
+                        identifier,
+                        bucket.tokens
+                    );
+
                     return Ok(());
                 }
 
                 // Calculate wait time for next token
                 let wait_time = Duration::from_secs_f64(1.0 / bucket.rate);
-                log::debug!("Rate limit reached for {}, waiting {:?}", 
-                    identifier, wait_time);
+                log::debug!(
+                    "Rate limit reached for {}, waiting {:?}",
+                    identifier,
+                    wait_time
+                );
             } // Release lock here
 
             // Sleep outside the lock to allow other tasks to proceed
@@ -109,14 +185,14 @@ impl RateLimiter {
     pub async fn check_token_availability(&self, identifier: &str) -> Result<bool> {
         let mut buckets = self.buckets.lock().await;
         let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-        
+
         if let Some(bucket) = buckets.get_mut(identifier) {
             // Refill tokens
             let time_passed = now.saturating_sub(bucket.last_refill) as f64;
             let tokens_to_add = time_passed * bucket.rate;
             bucket.tokens = (bucket.tokens + tokens_to_add).min(bucket.burst as f64);
             bucket.last_refill = now;
-            
+
             Ok(bucket.tokens >= 1.0)
         } else {
             // No bucket exists, so we can create one with full capacity
@@ -130,7 +206,7 @@ impl RateLimiter {
         let mut buckets = self.buckets.lock().await;
         let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
         let mut status = HashMap::new();
-        
+
         for (endpoint_key, bucket) in buckets.iter_mut() {
             // Refill tokens before reporting status
             let time_passed = now.saturating_sub(bucket.last_refill) as f64;
@@ -138,9 +214,12 @@ impl RateLimiter {
             bucket.tokens = (bucket.tokens + tokens_to_add).min(bucket.burst as f64);
             bucket.last_refill = now;
 
-            status.insert(endpoint_key.clone(), (bucket.tokens, bucket.rate, bucket.burst));
+            status.insert(
+                endpoint_key.clone(),
+                (bucket.tokens, bucket.rate, bucket.burst),
+            );
         }
-        
+
         Ok(status)
     }
 
@@ -162,14 +241,17 @@ impl RateLimiter {
     pub async fn record_response(&self, identifier: &str) -> Result<()> {
         let mut buckets = self.buckets.lock().await;
         let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-        
+
         if let Some(bucket) = buckets.get_mut(identifier) {
             bucket.last_response_time = Some(now);
             log::trace!("Recorded response time for {}: {}", identifier, now);
         } else {
-            log::warn!("Attempted to record response for unknown endpoint: {}", identifier);
+            log::warn!(
+                "Attempted to record response for unknown endpoint: {}",
+                identifier
+            );
         }
-        
+
         Ok(())
     }
 }

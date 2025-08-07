@@ -1,6 +1,6 @@
 [package]
 name = "amazon-spapi"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "A Rust client library for Amazon Selling Partner API (SP-API)"
 license = "MIT"
@@ -9,7 +9,7 @@ homepage = "https://github.com/houxd/amazon-spapi"
 documentation = "https://docs.rs/amazon-spapi"
 keywords = ["amazon", "spapi", "api", "e-commerce", "selling-partner"]
 categories = ["api-bindings", "web-programming::http-client"]
-authors = ["Your Name <your.email@example.com>"]
+authors = ["houxd.g@gmail.com"]
 exclude = [
     "examples/test.rs",
     "tests/*",
@@ -42,3 +42,4 @@ serde_urlencoded = "0.7.1"
 chrono = "0.4.41"
 env_logger = "0.10"
 backtrace = "0.3.75"
+csv = "1.3.1"
