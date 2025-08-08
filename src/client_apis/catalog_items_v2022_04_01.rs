@@ -22,8 +22,9 @@ impl SpapiClient {
         keywords_locale: Option<&str>,
     ) -> Result<ItemSearchResults> {
         let configuration = self.create_configuration().await?;
-        self.limiter()
-            .wait_for_token("/catalog/2022-04-01/items", 5.0, 5)
+        let _ = self
+            .limiter()
+            .wait_for_token("/catalog/2022-04-01/searchCatalogItems", 2.0, 2)
             .await?;
         let res = crate::apis::catalog_items_2022_04_01::search_catalog_items(
             &configuration,
@@ -40,11 +41,8 @@ impl SpapiClient {
             page_token,
             keywords_locale,
         )
-        .await;
-        self.limiter()
-            .record_response("/catalog/2022-04-01/items")
-            .await?;
-        Ok(res?)
+        .await?;
+        Ok(res)
     }
 
     /// Retrieves details for an item in the Amazon catalog.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 2 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
@@ -56,8 +54,9 @@ impl SpapiClient {
         locale: Option<&str>,
     ) -> Result<Item> {
         let configuration = self.create_configuration().await?;
-        self.limiter()
-            .wait_for_token("/catalog/2022-04-01/items", 5.0, 5)
+        let _ = self
+            .limiter()
+            .wait_for_token("/catalog/2022-04-01/getCatalogItem", 2.0, 2)
             .await?;
         let res = crate::apis::catalog_items_2022_04_01::get_catalog_item(
             &configuration,
@@ -66,11 +65,8 @@ impl SpapiClient {
             included_data,
             locale,
         )
-        .await;
-        self.limiter()
-            .record_response("/catalog/2022-04-01/items")
-            .await?;
-        Ok(res?)
+        .await?;
+        Ok(res)
     }
 
     /// Convenience method to search for items by ASIN.

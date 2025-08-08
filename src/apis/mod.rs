@@ -126,6 +126,8 @@ pub mod update_inventory_api;
 pub mod service_api;
 
 
+pub mod fba_inbound_api;
+pub mod fba_inventory_api;
 pub mod fba_outbound_api;
 
 
@@ -149,6 +151,7 @@ pub mod queries_api;
 pub mod listings_items_2020_09_01;
 pub mod listings_items_2021_08_01;
 
+pub mod listings_restrictions_2021_08_01;
 
 pub mod vendor_orders_api;
 
@@ -156,7 +159,8 @@ pub mod vendor_orders_api;
 pub mod shipment_invoice_api;
 
 
-pub mod default_api;
+pub mod finances_v0;
+pub mod finances_2024_06_19;
 
 
 pub mod sellers_api;
@@ -189,7 +193,6 @@ pub mod automotive_api;
 pub mod vehicles_api;
 
 
-pub mod fba_inventory_api;
 
 
 pub mod orders_v0_api;
@@ -213,6 +216,7 @@ pub mod easy_ship_api;
 
 
 pub mod vendor_invoice_api;
+pub mod vendor_shipping_api;
 
 
 pub mod aplus_content_api;
