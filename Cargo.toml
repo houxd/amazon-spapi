@@ -1,6 +1,6 @@
 [package]
 name = "amazon-spapi"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "A Rust client library for Amazon Selling Partner API (SP-API)"
 license = "MIT"

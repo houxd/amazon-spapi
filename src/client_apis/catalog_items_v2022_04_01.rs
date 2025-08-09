@@ -24,7 +24,7 @@ impl SpapiClient {
         let configuration = self.create_configuration().await?;
         let _ = self
             .limiter()
-            .wait_for_token("/catalog/2022-04-01/searchCatalogItems", 2.0, 2)
+            .wait("/catalog/2022-04-01/searchCatalogItems", 2.0, 2)
             .await?;
         let res = crate::apis::catalog_items_2022_04_01::search_catalog_items(
             &configuration,
@@ -56,7 +56,7 @@ impl SpapiClient {
         let configuration = self.create_configuration().await?;
         let _ = self
             .limiter()
-            .wait_for_token("/catalog/2022-04-01/getCatalogItem", 2.0, 2)
+            .wait("/catalog/2022-04-01/getCatalogItem", 2.0, 2)
             .await?;
         let res = crate::apis::catalog_items_2022_04_01::get_catalog_item(
             &configuration,

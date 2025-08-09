@@ -70,26 +70,25 @@ use anyhow::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Create client and configuration
     let spapi_config = SpapiConfig::from_env()?;
-    let client = SpapiClient::new(spapi_config.clone())?;
-    let configuration = client.create_configuration().await?;
-    
-    // Wait for rate limit token
-    client
-        .limiter()
-        .wait_for_token("get_marketplace_participations", 0.016, 15)
-        .await?;
-    
-    // Call the generated API function
-    let res = get_marketplace_participations(&configuration).await;
-    
-    // Record the API call for rate limiting
-    client.limiter()
-        .record_response("get_marketplace_participations")
-        .await?;
-    
-    println!("Marketplace Participations: {:#?}", res);
+    let spapi_client = SpapiClient::new(spapi_config.clone())?;
+    {
+        // Internally refresh the access token and create a configuration
+        // Configuration must be created for each API call
+        let configuration = spapi_client.create_configuration().await?;
+
+        // Wait for rate limit before making the API call
+        // When _guard is dropped, the rate limiter will mark the api call as having received a response
+        let _guard = spapi_client
+            .limiter()
+            .wait("get_marketplace_participations", 0.016, 15)
+            .await?;
+
+        // Call the API to get marketplace participations
+        let res = get_marketplace_participations(&configuration).await?;
+        
+        println!("Marketplace Participations: {:#?}", res);
+    }
     Ok(())
 }
 ```
