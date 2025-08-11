@@ -1,69 +1,59 @@
-use crate::client::{ApiEndpoint, ApiMethod, SpapiClient};
-use crate::models::product_fees_v0::{
-    FeesEstimateByIdRequest, FeesEstimateRequest, FeesEstimateResult, GetMyFeesEstimateRequest,
-    GetMyFeesEstimateResponse, IdType, MoneyType, OptionalFulfillmentProgram, PriceToEstimateFees,
+use crate::{
+    client::{ApiEndpoint, ApiMethod, SpapiClient},
+    models::{
+        self,
+        product_fees_v0::{
+            FeesEstimateByIdRequest, FeesEstimateRequest, GetMyFeesEstimateRequest, IdType,
+            MoneyType, OptionalFulfillmentProgram, PriceToEstimateFees,
+        },
+        sellers::{GetAccountResponse, GetMarketplaceParticipationsResponse},
+    },
 };
 use anyhow::Result;
 
 impl SpapiClient {
-    /// Get fees estimate for a product by seller SKU
-    pub async fn get_my_fees_estimate_for_sku(
-        &self,
-        sku: &str,
-        request: GetMyFeesEstimateRequest,
-    ) -> Result<GetMyFeesEstimateResponse> {
-        let endpoint = ApiEndpoint {
-            version: "product_fees_v0",
-            path: "/products/fees/v0/listings/{sku}/feesEstimate",
-            path_params: Some(vec![("sku", sku.to_string())]),
-            method: ApiMethod::Post,
-            rate: 1.0,
-            burst: 2,
-        };
-        let body = serde_json::to_string(&request)?;
-
-        let res = self.request(&endpoint, None, None, Some(&body)).await?;
-        Self::from_json(&res)
-    }
-
-    /// Get fees estimate for a product by ASIN
     pub async fn get_my_fees_estimate_for_asin(
         &self,
         asin: &str,
-        request: GetMyFeesEstimateRequest,
-    ) -> Result<GetMyFeesEstimateResponse> {
-        let endpoint = ApiEndpoint {
-            version: "product_fees_v0",
-            path: "/products/fees/v0/items/{asin}/feesEstimate",
-            path_params: Some(vec![("asin", asin.to_string())]),
-            method: ApiMethod::Post,
-            rate: 1.0,
-            burst: 2,
-        };
-        let body = serde_json::to_string(&request)?;
-        let res = self.request(&endpoint, None, None, Some(&body)).await?;
-        Self::from_json(&res)
+        body: models::product_fees_v0::GetMyFeesEstimateRequest,
+    ) -> Result<models::product_fees_v0::GetMyFeesEstimateResponse> {
+        let configuration = self.create_configuration().await?;
+        let _ = self
+            .limiter()
+            .wait("/products/fees/v0/items/feesEstimate", 1.0, 2)
+            .await?;
+        let res = crate::apis::fees_api::get_my_fees_estimate_for_asin(&configuration, asin, body)
+            .await?;
+        Ok(res)
     }
 
-    /// Get fees estimates for multiple products (batch operation)
+    pub async fn get_my_fees_estimate_for_sku(
+        &self,
+        seller_sku: &str,
+        body: models::product_fees_v0::GetMyFeesEstimateRequest,
+    ) -> Result<models::product_fees_v0::GetMyFeesEstimateResponse> {
+        let configuration = self.create_configuration().await?;
+        let _ = self
+            .limiter()
+            .wait("/products/fees/v0/listings/feesEstimate", 1.0, 2)
+            .await?;
+        let res =
+            crate::apis::fees_api::get_my_fees_estimate_for_sku(&configuration, seller_sku, body)
+                .await?;
+        Ok(res)
+    }
+
     pub async fn get_my_fees_estimates(
         &self,
-        requests: Vec<FeesEstimateByIdRequest>,
-    ) -> Result<Vec<FeesEstimateResult>> {
-        let endpoint = ApiEndpoint {
-            version: "product_fees_v0",
-            path: "/products/fees/v0/feesEstimate",
-            path_params: None,
-            method: ApiMethod::Post,
-            rate: 0.5,
-            burst: 1,
-        };
-
-        // Convert the request array to JSON string for the POST body
-        let body = serde_json::to_string(&requests)?;
-
-        let res = self.request(&endpoint, None, None, Some(&body)).await?;
-        Self::from_json(&res)
+        body: Vec<models::product_fees_v0::FeesEstimateByIdRequest>,
+    ) -> Result<Vec<models::product_fees_v0::FeesEstimateResult>> {
+        let configuration = self.create_configuration().await?;
+        let _ = self
+            .limiter()
+            .wait("/products/fees/v0/feesEstimate", 0.2, 1) // 0.5 always get 429
+            .await?;
+        let res = crate::apis::fees_api::get_my_fees_estimates(&configuration, body).await?;
+        Ok(res)
     }
 
     /// Convenience method to get fees estimate for a single ASIN with price
