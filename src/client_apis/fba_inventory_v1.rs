@@ -16,7 +16,7 @@ impl SpapiClient {
         add_inventory_request_body: models::fba_inventory::AddInventoryRequest,
     ) -> Result<models::fba_inventory::AddInventoryResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/fba/inventory/v1/addInventory", 2.0, 2)
             .await?;
@@ -26,6 +26,7 @@ impl SpapiClient {
             add_inventory_request_body,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -34,7 +35,7 @@ impl SpapiClient {
         create_inventory_item_request_body: models::fba_inventory::CreateInventoryItemRequest,
     ) -> Result<models::fba_inventory::CreateInventoryItemResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/fba/inventory/v1/createInventoryItem", 2.0, 2)
             .await?;
@@ -43,6 +44,7 @@ impl SpapiClient {
             create_inventory_item_request_body,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -52,7 +54,7 @@ impl SpapiClient {
         marketplace_id: &str,
     ) -> Result<models::fba_inventory::DeleteInventoryItemResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/fba/inventory/v1/deleteInventoryItem", 2.0, 2)
             .await?;
@@ -62,6 +64,7 @@ impl SpapiClient {
             marketplace_id,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -81,7 +84,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<GetInventorySummariesResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/fba/inventory/v1/summaries", 2.0, 2)
             .await?;
@@ -97,7 +100,7 @@ impl SpapiClient {
             next_token,
         )
         .await?;
-
+        guard.mark_response().await;
         Ok(res)
     }
 }

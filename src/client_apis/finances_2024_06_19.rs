@@ -19,7 +19,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::finances_2024_06_19::ListTransactionsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/finances/2024-06-19/listTransactions", 0.5, 10)
             .await?;
@@ -32,6 +32,7 @@ impl SpapiClient {
             next_token,
         )
         .await;
+        guard.mark_response().await;
         Ok(res?)
     }
 }

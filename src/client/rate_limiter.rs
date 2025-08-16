@@ -71,16 +71,9 @@ impl Drop for RateLimitGuard {
                 .as_secs();
 
             if let Some(bucket) = buckets.get_mut(&identifier) {
-                // Only record response time after initial burst is exhausted
-                if bucket.initial_burst_used || bucket.tokens < (bucket.burst as f64 * 0.5) {
-                    bucket.last_response_time = Some(now);
-                    log::trace!("Auto-recorded response time for {}: {}", identifier, now);
-                } else {
-                    log::trace!(
-                        "Skipping response time recording for {} (still in initial burst)",
-                        identifier
-                    );
-                }
+                // 始终记录响应时间，确保速率限制的准确性
+                bucket.last_response_time = Some(now);
+                log::trace!("Auto-recorded response time for {}: {}", identifier, now);
             } else {
                 log::warn!(
                     "Attempted to auto-record response for unknown endpoint: {}",
@@ -128,13 +121,6 @@ impl RateLimiter {
         ))
     }
 
-    /// Wait for a token to become available for the given endpoint
-    /// This method will block until a token is available
-    #[deprecated(since = "0.1.4", note = "Use `wait()` instead.")]
-    pub async fn wait_for_token(&self, identifier: &str, rate: f64, burst: u32) -> Result<()> {
-        self._wait_for_token(identifier, rate, burst).await
-    }
-
     async fn _wait_for_token(&self, identifier: &str, rate: f64, burst: u32) -> Result<()> {
         loop {
             let mut buckets = self.buckets.lock().await;
@@ -144,16 +130,16 @@ impl RateLimiter {
             let bucket = buckets.entry(identifier.to_string()).or_insert_with(|| {
                 log::debug!("Creating new token bucket for endpoint: {}", identifier);
                 TokenBucketState {
-                    tokens: burst as f64, // Start with full burst capacity
+                    tokens: burst as f64,
                     last_refill: now,
-                    last_response_time: None, // No response received yet
+                    last_response_time: None,
                     rate: rate,
                     burst: burst,
-                    initial_burst_used: false, // Mark that we haven't used the initial burst yet
+                    initial_burst_used: false,
                 }
             });
 
-            // Update bucket configuration if endpoint configuration changed
+            // Update bucket configuration if changed
             if (bucket.rate - rate).abs() > f64::EPSILON || bucket.burst != burst {
                 log::info!(
                     "Updating rate limit for {}: rate {} -> {}, burst {} -> {}",
@@ -167,15 +153,23 @@ impl RateLimiter {
                 bucket.burst = burst;
             }
 
-            // 始终进行token refill计算
-            let time_passed = now.saturating_sub(bucket.last_refill) as f64;
+            // Calculate token refill based on appropriate time reference
+            let refill_from_time = if bucket.initial_burst_used {
+                // After initial burst, use response time for consistent interval enforcement
+                bucket.last_response_time.unwrap_or(bucket.last_refill)
+            } else {
+                // During initial burst, use last_refill
+                bucket.last_refill
+            };
+
+            let time_passed = now.saturating_sub(refill_from_time) as f64;
             let tokens_to_add = time_passed * bucket.rate;
             let new_tokens = (bucket.tokens + tokens_to_add).min(bucket.burst as f64);
 
-            // 如果token恢复到了接近满容量，重置initial_burst_used标志
+            // Reset burst state if bucket refilled to near capacity
             if new_tokens >= (bucket.burst as f64 - 0.5) && bucket.initial_burst_used {
                 bucket.initial_burst_used = false;
-                bucket.last_response_time = None; // 清除响应时间记录
+                bucket.last_response_time = None;
                 log::debug!(
                     "Bucket {} refilled to near capacity ({:.1}), resetting burst state",
                     identifier,
@@ -186,7 +180,7 @@ impl RateLimiter {
             bucket.tokens = new_tokens;
             bucket.last_refill = now;
 
-            // Only check minimum interval if initial burst has been used AND we have recent response time
+            // Enforce minimum interval after initial burst
             if bucket.initial_burst_used {
                 if let Some(last_response_time) = bucket.last_response_time {
                     let minimum_interval = 1.0 / bucket.rate;
@@ -220,13 +214,14 @@ impl RateLimiter {
             if bucket.tokens >= 1.0 {
                 bucket.tokens -= 1.0;
 
-                // 只有当token数量降到很低时才标记initial_burst已用完
-                if bucket.tokens <= 1.0 && !bucket.initial_burst_used {
+                // 对于 burst=1 的情况，立即标记 initial_burst_used
+                if bucket.burst == 1 || bucket.tokens <= 0.0 {
                     bucket.initial_burst_used = true;
                     log::debug!(
-                        "Initial burst capacity exhausted for {} (tokens: {:.1})",
+                        "Initial burst capacity exhausted for {} (tokens: {:.1}, burst: {})",
                         identifier,
-                        bucket.tokens
+                        bucket.tokens,
+                        bucket.burst
                     );
                 }
 
@@ -318,27 +313,6 @@ impl RateLimiter {
     pub async fn active_buckets_count(&self) -> usize {
         let buckets = self.buckets.lock().await;
         buckets.len()
-    }
-
-    /// Record that a response was received for the given endpoint
-    /// This updates the last_response_time used for enforcing minimum intervals
-    #[deprecated(since = "0.1.4", note = "Use `wait()` instead.")]
-    pub async fn record_response(&self, identifier: &str) -> Result<()> {
-        let mut buckets = self.buckets.lock().await;
-        let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-
-        if let Some(bucket) = buckets.get_mut(identifier) {
-            bucket.last_response_time = Some(now);
-            bucket.initial_burst_used = true; // Mark that we've moved past initial burst
-            log::trace!("Recorded response time for {}: {}", identifier, now);
-        } else {
-            log::warn!(
-                "Attempted to record response for unknown endpoint: {}",
-                identifier
-            );
-        }
-
-        Ok(())
     }
 }
 

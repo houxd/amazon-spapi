@@ -22,7 +22,7 @@ impl SpapiClient {
         customer_type: Option<&str>,
     ) -> Result<models::product_pricing_v0::GetOffersResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/products/pricing/v0/items/{Asin}/offers", 0.5, 1)
             .await?;
@@ -34,6 +34,7 @@ impl SpapiClient {
             customer_type,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -42,7 +43,7 @@ impl SpapiClient {
         get_item_offers_batch_request_body: models::product_pricing_v0::GetItemOffersBatchRequest,
     ) -> Result<models::product_pricing_v0::GetItemOffersBatchResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/batches/products/pricing/v0/itemOffers", 0.1, 1)
             .await?;
@@ -52,6 +53,7 @@ impl SpapiClient {
             get_item_offers_batch_request_body,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -63,7 +65,7 @@ impl SpapiClient {
         customer_type: Option<&str>,
     ) -> Result<models::product_pricing_v0::GetOffersResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/products/pricing/v0/listings/{SellerSKU}/offers", 1.0, 2)
             .await?;
@@ -75,6 +77,7 @@ impl SpapiClient {
             customer_type,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -83,7 +86,7 @@ impl SpapiClient {
         get_listing_offers_batch_request_body: models::product_pricing_v0::GetListingOffersBatchRequest,
     ) -> Result<models::product_pricing_v0::GetListingOffersBatchResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/batches/products/pricing/v0/listingOffers", 0.5, 1)
             .await?;
@@ -93,6 +96,7 @@ impl SpapiClient {
             get_listing_offers_batch_request_body,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -106,7 +110,7 @@ impl SpapiClient {
         offer_type: Option<&str>,
     ) -> Result<models::product_pricing_v0::GetPricingResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/products/pricing/v0/price", 0.5, 1)
             .await?;
@@ -120,6 +124,7 @@ impl SpapiClient {
             offer_type,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 

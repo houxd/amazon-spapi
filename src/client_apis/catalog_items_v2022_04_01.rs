@@ -22,7 +22,7 @@ impl SpapiClient {
         keywords_locale: Option<&str>,
     ) -> Result<ItemSearchResults> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/catalog/2022-04-01/searchCatalogItems", 2.0, 2)
             .await?;
@@ -42,6 +42,7 @@ impl SpapiClient {
             keywords_locale,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -54,7 +55,7 @@ impl SpapiClient {
         locale: Option<&str>,
     ) -> Result<Item> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/catalog/2022-04-01/getCatalogItem", 2.0, 2)
             .await?;
@@ -66,6 +67,7 @@ impl SpapiClient {
             locale,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 

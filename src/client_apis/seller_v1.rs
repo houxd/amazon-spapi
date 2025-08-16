@@ -9,11 +9,12 @@ impl SpapiClient {
         &self,
     ) -> Result<GetMarketplaceParticipationsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/sellers/v1/marketplaceParticipations", 0.016, 15)
             .await?;
         let res = crate::apis::sellers_api::get_marketplace_participations(&configuration).await?;
+        guard.mark_response().await;
         Ok(res)
     }
 

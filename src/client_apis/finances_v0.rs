@@ -11,7 +11,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::finances_v0::ListFinancialEventGroupsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/finances/v0/financialEventGroups", 0.5, 30)
             .await?;
@@ -23,6 +23,7 @@ impl SpapiClient {
             next_token,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -35,7 +36,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::finances_v0::ListFinancialEventsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/finances/v0/financialEvents", 0.5, 30)
             .await?;
@@ -47,6 +48,7 @@ impl SpapiClient {
             next_token,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -59,7 +61,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::finances_v0::ListFinancialEventsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/finances/v0/financialEventsByGroupId", 0.5, 30)
             .await?;
@@ -72,6 +74,7 @@ impl SpapiClient {
             next_token,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -82,7 +85,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::finances_v0::ListFinancialEventsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/finances/v0/financialEventsByOrderId", 0.5, 30)
             .await?;
@@ -93,6 +96,7 @@ impl SpapiClient {
             next_token,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 }

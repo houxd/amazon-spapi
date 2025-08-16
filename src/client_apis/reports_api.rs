@@ -14,17 +14,18 @@ use tokio::time::sleep;
 impl SpapiClient {
     pub async fn cancel_report(&self, report_id: &str) -> Result<()> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports/{reportId}/cancel", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::cancel_report(&configuration, report_id).await;
-        Ok(res?)
+        let res = crate::apis::reports_api::cancel_report(&configuration, report_id).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn cancel_report_schedule(&self, report_schedule_id: &str) -> Result<()> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait(
                 "/reports/v2021-06-30/schedules/{reportScheduleId}/cancel",
@@ -34,8 +35,9 @@ impl SpapiClient {
             .await?;
         let res =
             crate::apis::reports_api::cancel_report_schedule(&configuration, report_schedule_id)
-                .await;
-        Ok(res?)
+                .await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn create_report(
@@ -43,12 +45,13 @@ impl SpapiClient {
         body: models::reports_2021_06_30::CreateReportSpecification,
     ) -> Result<models::reports_2021_06_30::CreateReportResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::create_report(&configuration, body).await;
-        Ok(res?)
+        let res = crate::apis::reports_api::create_report(&configuration, body).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn create_report_schedule(
@@ -56,22 +59,24 @@ impl SpapiClient {
         body: models::reports_2021_06_30::CreateReportScheduleSpecification,
     ) -> Result<models::reports_2021_06_30::CreateReportScheduleResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/schedules", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::create_report_schedule(&configuration, body).await;
-        Ok(res?)
+        let res = crate::apis::reports_api::create_report_schedule(&configuration, body).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn get_report(&self, report_id: &str) -> Result<models::reports_2021_06_30::Report> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports/{reportId}", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::get_report(&configuration, report_id).await;
-        Ok(res?)
+        let res = crate::apis::reports_api::get_report(&configuration, report_id).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn get_report_document(
@@ -79,7 +84,7 @@ impl SpapiClient {
         report_document_id: &str,
     ) -> Result<models::reports_2021_06_30::ReportDocument> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait(
                 "/reports/v2021-06-30/reports/{reportId}/document",
@@ -87,9 +92,10 @@ impl SpapiClient {
                 15,
             )
             .await?;
-        let res =
-            crate::apis::reports_api::get_report_document(&configuration, report_document_id).await;
-        Ok(res?)
+        let res = crate::apis::reports_api::get_report_document(&configuration, report_document_id)
+            .await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn get_report_schedule(
@@ -97,7 +103,7 @@ impl SpapiClient {
         report_schedule_id: &str,
     ) -> Result<models::reports_2021_06_30::ReportSchedule> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait(
                 "/reports/v2021-06-30/schedules/{reportScheduleId}",
@@ -106,8 +112,9 @@ impl SpapiClient {
             )
             .await?;
         let res =
-            crate::apis::reports_api::get_report_schedule(&configuration, report_schedule_id).await;
-        Ok(res?)
+            crate::apis::reports_api::get_report_schedule(&configuration, report_schedule_id).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn get_report_schedules(
@@ -115,13 +122,14 @@ impl SpapiClient {
         report_types: Vec<String>,
     ) -> Result<models::reports_2021_06_30::ReportScheduleList> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/schedules", 0.016, 15)
             .await?;
         let res =
-            crate::apis::reports_api::get_report_schedules(&configuration, report_types).await;
-        Ok(res?)
+            crate::apis::reports_api::get_report_schedules(&configuration, report_types).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     pub async fn get_reports(
@@ -135,7 +143,7 @@ impl SpapiClient {
         next_token: Option<&str>,
     ) -> Result<models::reports_2021_06_30::GetReportsResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports", 0.016, 15)
             .await?;
@@ -149,8 +157,9 @@ impl SpapiClient {
             created_until,
             next_token,
         )
-        .await;
-        Ok(res?)
+        .await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 
     /// Convenience method to fetch a report by type and marketplace IDs, defaulting to a 30-minute wait.

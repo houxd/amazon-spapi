@@ -11,7 +11,7 @@ impl SpapiClient {
         issue_locale: Option<&str>,
     ) -> Result<models::listings_items_2021_08_01::ListingsItemSubmissionResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/listings/2021-08-01/deleteListingsItem", 5.0, 5)
             .await?;
@@ -23,6 +23,7 @@ impl SpapiClient {
             issue_locale,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -36,7 +37,7 @@ impl SpapiClient {
         included_data: Option<Vec<String>>,
     ) -> Result<models::listings_items_2021_08_01::Item> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/listings/2021-08-01/getListingsItem", 5.0, 10)
             .await?;
@@ -49,6 +50,7 @@ impl SpapiClient {
             included_data,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -64,7 +66,7 @@ impl SpapiClient {
         issue_locale: Option<&str>,
     ) -> Result<models::listings_items_2021_08_01::ListingsItemSubmissionResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/listings/2021-08-01/patchListingsItem", 5.0, 5)
             .await?;
@@ -79,6 +81,7 @@ impl SpapiClient {
             issue_locale,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -94,7 +97,7 @@ impl SpapiClient {
         issue_locale: Option<&str>,
     ) -> Result<models::listings_items_2021_08_01::ListingsItemSubmissionResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/listings/2021-08-01/putListingsItem", 5.0, 10)
             .await?;
@@ -109,6 +112,7 @@ impl SpapiClient {
             issue_locale,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -136,7 +140,7 @@ impl SpapiClient {
         page_token: Option<&str>,
     ) -> Result<models::listings_items_2021_08_01::ItemSearchResults> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/listings/2021-08-01/searchListingsItems", 5.0, 5)
             .await?;
@@ -163,6 +167,7 @@ impl SpapiClient {
             page_token,
         )
         .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 }

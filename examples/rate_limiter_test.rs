@@ -1,32 +1,43 @@
-use std::{thread::sleep, time::Duration};
-
-use amazon_spapi::client::rate_limiter;
+use amazon_spapi::client::RateLimiter;
 use anyhow::Result;
+use std::time::Duration;
+
+async fn call_api_with_error(
+    i: usize,
+    rate_limiter: &RateLimiter,
+    should_fail: bool,
+) -> Result<()> {
+    let guard = rate_limiter.wait("func1", 0.1, 1).await?;
+
+    println!("API call {} start at: {}", i, chrono::Local::now());
+
+    if should_fail {
+        return Err(anyhow::anyhow!("API call failed"));
+    }
+
+    tokio::time::sleep(Duration::from_secs(1)).await;
+    println!("API call {} end at  : {}", i, chrono::Local::now());
+
+    guard.mark_response().await;
+    Ok(())
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
 
-    let rate_limiter = rate_limiter::RateLimiter::new();
+    let rate_limiter = RateLimiter::new();
 
-    for i in 1..=5 {
-        let _ = rate_limiter.wait("func1", 1.0, 15).await?;
-        println!("call {}, time: {}", i, chrono::Local::now());
+    if let Err(e) = call_api_with_error(1, &rate_limiter, false).await {
+        println!("Call 1 failed: {}", e);
     }
 
-    sleep(Duration::from_secs(5));
-
-    for i in 1..=20 {
-        let _ = rate_limiter.wait("func1", 1.0, 15).await?;
-        println!("call {}, time: {}", i, chrono::Local::now());
+    if let Err(e) = call_api_with_error(2, &rate_limiter, true).await {
+        println!("Call 2 failed: {}", e);
     }
 
-    sleep(Duration::from_secs(15));
-
-
-    for i in 1..=20 {
-        let _ = rate_limiter.wait("func1", 1.0, 15).await?;
-        println!("call {}, time: {}", i, chrono::Local::now());
+    if let Err(e) = call_api_with_error(3, &rate_limiter, false).await {
+        println!("Call 3 failed: {}", e);
     }
 
     Ok(())

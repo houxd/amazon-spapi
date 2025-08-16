@@ -18,12 +18,13 @@ impl SpapiClient {
         body: models::product_fees_v0::GetMyFeesEstimateRequest,
     ) -> Result<models::product_fees_v0::GetMyFeesEstimateResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/products/fees/v0/items/feesEstimate", 1.0, 2)
             .await?;
         let res = crate::apis::fees_api::get_my_fees_estimate_for_asin(&configuration, asin, body)
             .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -33,13 +34,14 @@ impl SpapiClient {
         body: models::product_fees_v0::GetMyFeesEstimateRequest,
     ) -> Result<models::product_fees_v0::GetMyFeesEstimateResponse> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
             .wait("/products/fees/v0/listings/feesEstimate", 1.0, 2)
             .await?;
         let res =
             crate::apis::fees_api::get_my_fees_estimate_for_sku(&configuration, seller_sku, body)
                 .await?;
+        guard.mark_response().await;
         Ok(res)
     }
 
@@ -48,11 +50,12 @@ impl SpapiClient {
         body: Vec<models::product_fees_v0::FeesEstimateByIdRequest>,
     ) -> Result<Vec<models::product_fees_v0::FeesEstimateResult>> {
         let configuration = self.create_configuration().await?;
-        let _ = self
+        let guard = self
             .limiter()
-            .wait("/products/fees/v0/feesEstimate", 0.2, 1) // 0.5 always get 429
+            .wait("/products/fees/v0/feesEstimate", 0.5, 1)
             .await?;
         let res = crate::apis::fees_api::get_my_fees_estimates(&configuration, body).await?;
+        guard.mark_response().await;
         Ok(res)
     }
 

@@ -169,16 +169,10 @@ impl SpapiClient {
             .wait(&endpoint.rate_limit_key(), endpoint.rate, endpoint.burst)
             .await?;
 
-        let response = request_builder.send().await;
+        let response = request_builder.send().await?;
 
         limiter.mark_response().await;
 
-        // // Record the response time for rate limiting
-        // self.rate_limiter
-        //     .record_response(&endpoint.rate_limit_key())
-        //     .await?;
-
-        let response = response?;
         log::debug!("Response status: {}", response.status());
 
         let response_status = response.status();
