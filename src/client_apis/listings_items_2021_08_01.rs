@@ -170,4 +170,50 @@ impl SpapiClient {
         guard.mark_response().await;
         Ok(res)
     }
+
+    /// Convenience method to get all listings items for a seller in a marketplace.
+    pub async fn get_all_listings_items(
+        &self,
+        seller_id: &str,
+        marketplace_ids: Vec<String>,
+    ) -> Result<Vec<models::listings_items_2021_08_01::Item>> {
+        let mut page_token = None;
+
+        let mut all_items = Vec::new();
+        loop {
+            let res = self
+                .search_listings_items(
+                    seller_id,
+                    marketplace_ids.clone(),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(20), // max 20 items per page
+                    page_token.as_deref(),
+                )
+                .await?;
+            all_items.extend(res.items);
+            if res.pagination.is_none() {
+                break;
+            }
+            page_token = res.pagination.unwrap().next_token;
+            if page_token.is_none() {
+                break;
+            }
+        }
+
+        Ok(all_items)
+    }
 }

@@ -78,14 +78,16 @@ async fn main() -> Result<()> {
         let configuration = spapi_client.create_configuration().await?;
 
         // Wait for rate limit before making the API call
-        // When _guard is dropped, the rate limiter will mark the api call as having received a response
-        let _guard = spapi_client
+        let guard = spapi_client
             .limiter()
             .wait("get_marketplace_participations", 0.016, 15)
             .await?;
 
         // Call the API to get marketplace participations
         let res = get_marketplace_participations(&configuration).await?;
+
+        // mark the api call as having received a response
+        guard.mark_response().await;
         
         println!("Marketplace Participations: {:#?}", res);
     }

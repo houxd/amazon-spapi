@@ -94,6 +94,8 @@ impl SpapiClient {
     }
 
     /// Make a request to the SP API
+    #[allow(unused)]
+    #[deprecated]
     pub async fn request(
         &self,
         endpoint: &ApiEndpoint,
@@ -234,11 +236,15 @@ impl SpapiClient {
     }
 
     /// Check if rate limiting is enabled and get token status
+    #[allow(unused)]
+    #[deprecated]
     pub async fn get_rate_limit_status(&self) -> Result<HashMap<String, (f64, f64, u32)>> {
         Ok(self.rate_limiter.get_token_status().await?)
     }
 
     /// Check if a token is available for a specific endpoint without consuming it
+    #[allow(unused)]
+    #[deprecated]
     pub async fn check_rate_limit_availability(&self, endpoint_id: &String) -> Result<bool> {
         Ok(self
             .rate_limiter
@@ -302,8 +308,13 @@ impl SpapiClient {
 
         let configuration = Configuration {
             base_path: self.get_base_url(),
-            client: http_client,
-            ..Default::default()
+            client: crate::apis::configuration::CustomClient::new(http_client),
+            user_agent: Some(
+                self.config
+                    .user_agent
+                    .clone()
+                    .unwrap_or_else(|| Self::get_user_agent()),
+            ),
         };
         Ok(configuration)
     }

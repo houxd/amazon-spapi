@@ -19,15 +19,13 @@ impl SpapiClient {
     }
 
     pub async fn get_account(&self) -> Result<GetAccountResponse> {
-        let endpoint = ApiEndpoint {
-            version: "sellers_v1",
-            path: "/sellers/v1/account",
-            path_params: None,
-            method: ApiMethod::Get,
-            rate: 0.016,
-            burst: 15,
-        };
-        let res = self.request(&endpoint, None, None, None).await?;
-        Self::from_json(&res)
+        let configuration = self.create_configuration().await?;
+        let guard = self
+            .limiter()
+            .wait("/sellers/v1/account", 0.016, 15)
+            .await?;
+        let res = crate::apis::sellers_api::get_account(&configuration).await?;
+        guard.mark_response().await;
+        Ok(res)
     }
 }

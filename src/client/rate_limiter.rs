@@ -71,7 +71,7 @@ impl Drop for RateLimitGuard {
                 .as_secs();
 
             if let Some(bucket) = buckets.get_mut(&identifier) {
-                // 始终记录响应时间，确保速率限制的准确性
+                // Always record the response time to ensure accurate rate limiting
                 bucket.last_response_time = Some(now);
                 log::trace!("Auto-recorded response time for {}: {}", identifier, now);
             } else {
@@ -214,7 +214,7 @@ impl RateLimiter {
             if bucket.tokens >= 1.0 {
                 bucket.tokens -= 1.0;
 
-                // 对于 burst=1 的情况，立即标记 initial_burst_used
+                // For burst=1, immediately mark initial_burst_used
                 if bucket.burst == 1 || bucket.tokens <= 0.0 {
                     bucket.initial_burst_used = true;
                     log::debug!(
