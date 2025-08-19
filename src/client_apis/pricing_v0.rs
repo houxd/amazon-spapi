@@ -2,7 +2,7 @@ use anyhow::{anyhow, Ok, Result};
 use std::vec;
 
 use crate::{
-    client::{config, ApiEndpoint, ApiMethod, SpapiClient},
+    client::SpapiClient,
     models::{
         self,
         product_pricing_v0::{
@@ -139,7 +139,10 @@ impl SpapiClient {
             .iter()
             .map(|&asin| {
                 ItemOffersRequest {
-                    uri: format!("/products/pricing/v0/items/{Asin}/offers", Asin=crate::apis::urlencode(asin)),
+                    uri: format!(
+                        "/products/pricing/v0/items/{Asin}/offers",
+                        Asin = crate::apis::urlencode(asin)
+                    ),
                     method: HttpMethod::Get,
                     headers: None,
                     marketplace_id: marketplace_id.to_string(),
@@ -165,7 +168,10 @@ impl SpapiClient {
             .iter()
             .map(|&sku| {
                 ListingOffersRequest {
-                    uri: format!("/products/pricing/v0/listings/{SellerSKU}/offers", SellerSKU=crate::apis::urlencode(sku)),
+                    uri: format!(
+                        "/products/pricing/v0/listings/{SellerSKU}/offers",
+                        SellerSKU = crate::apis::urlencode(sku)
+                    ),
                     method: HttpMethod::Get,
                     headers: None,
                     marketplace_id: marketplace_id.to_string(),

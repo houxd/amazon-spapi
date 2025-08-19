@@ -1,5 +1,5 @@
 use anyhow::Result;
-use amazon_spapi::client::{SpapiClient, SpapiConfig, OptionExt};
+use amazon_spapi::client::{SpapiClient, SpapiConfig};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -8,7 +8,6 @@ async fn main() -> Result<()> {
 
     let marketplace = client.get_marketplace_participations().await?;
     println!("Marketplace: {:#?}", marketplace);
-    println!("{}", marketplace.payload.ok()?[0].marketplace.name);
 
     Ok(())
 }

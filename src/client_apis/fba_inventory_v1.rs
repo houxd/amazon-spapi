@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use crate::{
     apis::fba_inventory_api::get_inventory_summaries,
-    client::{ApiEndpoint, ApiMethod, SpapiClient},
+    client::SpapiClient,
     models::{
         self,
         fba_inventory::{GetInventorySummariesResponse, InventoryItem},

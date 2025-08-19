@@ -1,5 +1,5 @@
 use crate::{
-    client::{ApiEndpoint, ApiMethod, SpapiClient},
+    client::SpapiClient,
     models::sellers::{GetAccountResponse, GetMarketplaceParticipationsResponse},
 };
 use anyhow::Result;

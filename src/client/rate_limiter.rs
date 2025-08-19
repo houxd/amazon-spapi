@@ -5,8 +5,6 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tokio::sync::Mutex;
 use tokio::time::sleep;
 
-use crate::client::ApiEndpoint;
-
 /// RAII guard that automatically records response when dropped
 #[must_use = "RateLimitGuard must be held until the API response is received"]
 pub struct RateLimitGuard {

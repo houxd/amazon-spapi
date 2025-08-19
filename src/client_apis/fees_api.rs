@@ -1,5 +1,5 @@
 use crate::{
-    client::{ApiEndpoint, ApiMethod, SpapiClient},
+    client::SpapiClient,
     models::{
         self,
         product_fees_v0::{

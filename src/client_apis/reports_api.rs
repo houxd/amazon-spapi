@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use crate::{
-    client::{ApiEndpoint, ApiMethod, SpapiClient},
+    client::SpapiClient,
     models::{
         self,
         reports_2021_06_30::{report::ProcessingStatus, CreateReportSpecification},
@@ -111,8 +111,8 @@ impl SpapiClient {
                 15,
             )
             .await?;
-        let res =
-            crate::apis::reports_api::get_report_schedule(&configuration, report_schedule_id).await?;
+        let res = crate::apis::reports_api::get_report_schedule(&configuration, report_schedule_id)
+            .await?;
         guard.mark_response().await;
         Ok(res)
     }

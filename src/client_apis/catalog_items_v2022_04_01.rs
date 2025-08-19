@@ -1,4 +1,4 @@
-use crate::client::{ApiEndpoint, ApiMethod, SpapiClient};
+use crate::client::SpapiClient;
 use crate::models::catalog_items_2022_04_01::*;
 use anyhow::Result;
 use std::collections::HashSet;

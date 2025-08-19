@@ -1,7 +1,4 @@
-use crate::{
-    client::{ApiEndpoint, ApiMethod, SpapiClient},
-    models,
-};
+use crate::{client::SpapiClient, models};
 use anyhow::Result;
 
 impl SpapiClient {
@@ -18,7 +15,7 @@ impl SpapiClient {
             .limiter()
             .wait("/listings/2021-08-01/restrictions", 5.0, 10)
             .await?;
-        
+
         let res = crate::apis::listings_restrictions_2021_08_01::get_listings_restrictions(
             &configuration,
             asin,
@@ -28,7 +25,7 @@ impl SpapiClient {
             reason_locale,
         )
         .await?;
-        
+
         guard.mark_response().await;
         Ok(res)
     }

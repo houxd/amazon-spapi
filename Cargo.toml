@@ -1,6 +1,6 @@
 [package]
 name = "amazon-spapi"
-version = "0.1.7"
+version = "1.0.0"
 edition = "2021"
 description = "A Rust client library for Amazon Selling Partner API (SP-API)"
 license = "MIT"
@@ -10,36 +10,39 @@ documentation = "https://docs.rs/amazon-spapi"
 keywords = ["amazon", "spapi", "api", "e-commerce", "selling-partner"]
 categories = ["api-bindings", "web-programming::http-client"]
 authors = ["houxd.g@gmail.com"]
-exclude = [
-    "examples/test.rs",
-    "tests/*",
-    ".github/*",
-    "*.log",
-]
+exclude = ["examples/test.rs", "tests/*", ".github/*", "*.log"]
 
 [lib]
 crate-type = ["lib"]
 
 [dependencies]
-reqwest = { version = "0.11", default-features = false, features = [
+reqwest = { version = "0.12", default-features = false, features = [
     "json",
     "rustls-tls",
 ] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-serde_repr = "^0.1"
-serde_with = { version = "^3.8", default-features = false, features = ["base64", "std", "macros"] }
-tokio = { version = "1.0", features = ["full"] }
+serde_repr = "0.1"
+serde_with = { version = "3.8", default-features = false, features = [
+    "base64",
+    "std",
+    "macros",
+] }
+tokio = { version = "1.47", features = [
+    "rt-multi-thread",
+    "macros",
+    "time",
+    "net",
+    "sync",
+] }
 anyhow = "1.0"
-toml = "0.8"
+toml = "0.9"
 time = "0.3"
 url = "2.4"
-urlencoding = "2.1"
 log = "0.4"
-async-trait = "0.1"
+
+[dev-dependencies]
 clap = { version = "4.5.41", features = ["derive"] }
-serde_urlencoded = "0.7.1"
-chrono = "0.4.41"
 env_logger = "0.10"
-backtrace = "0.3.75"
 csv = "1.3.1"
+chrono = "0.4.41"
