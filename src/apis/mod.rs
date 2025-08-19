@@ -176,8 +176,7 @@ pub mod fulfillment_inbound_2024_03_20;
 pub mod fulfillment_inbound_v0;
 
 
-pub mod offers_api;
-pub mod sellingpartners_api;
+pub mod replenishment_2022_11_07;
 
 
 pub mod reports_api;
