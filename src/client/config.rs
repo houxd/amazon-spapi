@@ -12,6 +12,7 @@ pub struct SpapiConfig {
     pub sandbox: bool,
     pub user_agent: Option<String>,
     pub timeout_sec: Option<u64>,
+    pub rate_limite_factor: Option<f64>,
 }
 
 impl SpapiConfig {
@@ -44,6 +45,7 @@ impl SpapiConfig {
             sandbox,
             user_agent: None,
             timeout_sec: Some(30),
+            rate_limite_factor: None,
         })
     }
 }

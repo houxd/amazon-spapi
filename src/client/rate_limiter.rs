@@ -97,13 +97,51 @@ pub struct TokenBucketState {
 /// Thread-safe but not cross-process
 pub struct RateLimiter {
     buckets: Arc<Mutex<HashMap<String, TokenBucketState>>>,
+    /// Safety factor to add buffer time between requests (1.0 = no buffer, 1.1 = 10% buffer)
+    /// Default is 1.05 (5% buffer) to avoid 429 errors due to timing inconsistencies
+    safety_factor: f64,
 }
 
 impl RateLimiter {
     pub fn new() -> Self {
         Self {
             buckets: Arc::new(Mutex::new(HashMap::new())),
+            safety_factor: 1.10, // Default 10% safety buffer
         }
+    }
+
+    /// Create a new rate limiter with a custom safety factor
+    /// Safety factor > 1.0 adds buffer time between requests
+    /// For example, 1.1 means 10% longer wait times
+    pub fn new_with_safety_factor(safety_factor: f64) -> Self {
+        let factor = if safety_factor < 1.0 {
+            log::warn!("Safety factor {} is less than 1.0, using 1.0 instead", safety_factor);
+            1.0
+        } else {
+            safety_factor
+        };
+        
+        Self {
+            buckets: Arc::new(Mutex::new(HashMap::new())),
+            safety_factor: factor,
+        }
+    }
+
+    /// Set the safety factor for rate limiting
+    /// This adds a buffer to prevent 429 errors due to timing inconsistencies
+    pub fn set_safety_factor(&mut self, safety_factor: f64) {
+        if safety_factor < 1.0 {
+            log::warn!("Safety factor {} is less than 1.0, using 1.0 instead", safety_factor);
+            self.safety_factor = 1.0;
+        } else {
+            self.safety_factor = safety_factor;
+            log::info!("Rate limiter safety factor set to {}", safety_factor);
+        }
+    }
+
+    /// Get the current safety factor
+    pub fn get_safety_factor(&self) -> f64 {
+        self.safety_factor
     }
 
     /// Wait for a token to become available for the given endpoint and return a guard
@@ -181,14 +219,17 @@ impl RateLimiter {
             // Enforce minimum interval after initial burst
             if bucket.initial_burst_used {
                 if let Some(last_response_time) = bucket.last_response_time {
-                    let minimum_interval = 1.0 / bucket.rate;
+                    let base_minimum_interval = 1.0 / bucket.rate;
+                    // Apply safety factor to add buffer time
+                    let minimum_interval = base_minimum_interval * self.safety_factor;
                     let time_since_response = now.saturating_sub(last_response_time) as f64;
 
                     if time_since_response < minimum_interval {
                         let wait_seconds = minimum_interval - time_since_response;
                         log::debug!(
-                            "Enforcing minimum interval for {}: waiting {:.3}s since last response",
+                            "Enforcing minimum interval for {} (safety factor: {:.2}): waiting {:.3}s since last response",
                             identifier,
+                            self.safety_factor,
                             wait_seconds
                         );
 
@@ -235,11 +276,15 @@ impl RateLimiter {
 
             // Calculate wait time for next token
             let tokens_needed = 1.0 - bucket.tokens;
-            let wait_seconds = tokens_needed / bucket.rate;
+            let base_wait_seconds = tokens_needed / bucket.rate;
+            // Apply safety factor to wait time
+            let wait_seconds = base_wait_seconds * self.safety_factor;
             log::debug!(
-                "Rate limit reached for {}, need to wait {:.2}s for next token",
+                "Rate limit reached for {}, need to wait {:.2}s (base: {:.2}s, safety factor: {:.2}) for next token",
                 identifier,
-                wait_seconds
+                wait_seconds,
+                base_wait_seconds,
+                self.safety_factor
             );
 
             // Mark initial burst as exhausted (if not already marked)
