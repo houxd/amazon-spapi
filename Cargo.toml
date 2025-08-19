@@ -28,7 +28,7 @@ serde_with = { version = "3.8", default-features = false, features = [
     "std",
     "macros",
 ] }
-tokio = { version = "1.47", features = [
+tokio = { version = "1.0", features = [
     "rt-multi-thread",
     "macros",
     "time",
