@@ -44,7 +44,7 @@ impl SpapiClient {
         )?;
 
         // Initialize rate limiter if enabled
-        let rate_limiter = RateLimiter::new_with_safety_factor(config.rate_limite_factor.unwrap_or(1.05));
+        let rate_limiter = RateLimiter::new_with_safety_factor(config.rate_limit_factor.unwrap_or(1.05));
 
         Ok(Self {
             client, //: Client::new(),
