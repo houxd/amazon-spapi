@@ -10,6 +10,7 @@ pub mod fees_api;
 pub mod listings_items_2021_08_01;
 pub mod listings_restrictions_2021_08_01;
 pub mod pricing_v0;
+pub mod product_type_definitions_2020_09_01;
 pub mod seller_v1;
 pub mod reports_api;
 pub mod replenishment_2022_11_07;

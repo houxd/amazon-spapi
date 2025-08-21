@@ -239,7 +239,7 @@ pub mod transfer_preview_api;
 pub mod transfer_schedule_api;
 
 
-pub mod definitions_api;
+pub mod product_type_definitions_2020_09_01;
 
 
 pub mod product_pricing_2022_05_01;
