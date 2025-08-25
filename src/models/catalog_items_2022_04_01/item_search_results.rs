@@ -18,7 +18,7 @@ pub struct ItemSearchResults {
     #[serde(rename = "numberOfResults")]
     pub number_of_results: i32,
     #[serde(rename = "pagination")]
-    pub pagination: Box<models::catalog_items_2022_04_01::Pagination>,
+    pub pagination: Option<Box<models::catalog_items_2022_04_01::Pagination>>,
     #[serde(rename = "refinements")]
     pub refinements: Box<models::catalog_items_2022_04_01::Refinements>,
     /// A list of items from the Amazon catalog.
@@ -31,7 +31,7 @@ impl ItemSearchResults {
     pub fn new(number_of_results: i32, pagination: models::catalog_items_2022_04_01::Pagination, refinements: models::catalog_items_2022_04_01::Refinements, items: Vec<models::catalog_items_2022_04_01::Item>) -> ItemSearchResults {
         ItemSearchResults {
             number_of_results,
-            pagination: Box::new(pagination),
+            pagination: Some(Box::new(pagination)),
             refinements: Box::new(refinements),
             items,
         }

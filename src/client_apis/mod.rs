@@ -7,6 +7,7 @@ pub mod finances_2024_06_19;
 pub mod finances_v0;
 pub mod feeds_api;
 pub mod fees_api;
+pub mod fulfillment_inbound_2024_03_20;
 pub mod listings_items_2021_08_01;
 pub mod listings_restrictions_2021_08_01;
 pub mod pricing_v0;
