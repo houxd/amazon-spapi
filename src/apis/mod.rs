@@ -16,7 +16,7 @@ pub enum Error<T> {
     ResponseError(ResponseContent<T>),
 }
 
-impl <T> fmt::Display for Error<T> {
+impl<T> fmt::Display for Error<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (module, e) = match self {
             Error::Reqwest(e) => ("reqwest", e.to_string()),
@@ -28,7 +28,7 @@ impl <T> fmt::Display for Error<T> {
     }
 }
 
-impl <T: fmt::Debug> error::Error for Error<T> {
+impl<T: fmt::Debug> error::Error for Error<T> {
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         Some(match self {
             Error::Reqwest(e) => e,
@@ -39,19 +39,19 @@ impl <T: fmt::Debug> error::Error for Error<T> {
     }
 }
 
-impl <T> From<reqwest::Error> for Error<T> {
+impl<T> From<reqwest::Error> for Error<T> {
     fn from(e: reqwest::Error) -> Self {
         Error::Reqwest(e)
     }
 }
 
-impl <T> From<serde_json::Error> for Error<T> {
+impl<T> From<serde_json::Error> for Error<T> {
     fn from(e: serde_json::Error) -> Self {
         Error::Serde(e)
     }
 }
 
-impl <T> From<std::io::Error> for Error<T> {
+impl<T> From<std::io::Error> for Error<T> {
     fn from(e: std::io::Error) -> Self {
         Error::Io(e)
     }
@@ -78,8 +78,10 @@ pub fn parse_deep_object(prefix: &str, value: &serde_json::Value) -> Vec<(String
                             value,
                         ));
                     }
-                },
-                serde_json::Value::String(s) => params.push((format!("{}[{}]", prefix, key), s.clone())),
+                }
+                serde_json::Value::String(s) => {
+                    params.push((format!("{}[{}]", prefix, key), s.clone()))
+                }
                 _ => params.push((format!("{}[{}]", prefix, key), value.to_string())),
             }
         }
@@ -96,7 +98,7 @@ pub fn parse_deep_object(prefix: &str, value: &serde_json::Value) -> Vec<(String
 enum ContentType {
     Json,
     Text,
-    Unsupported(String)
+    Unsupported(String),
 }
 
 impl From<&str> for ContentType {
@@ -113,142 +115,62 @@ impl From<&str> for ContentType {
 
 pub mod configuration;
 
-pub mod shipping;
-pub mod shipping_v2;
-
-pub mod vendor_df_sandbox_api;
-pub mod vendor_df_sandboxtransactionstatus_api;
-
-
-pub mod update_inventory_api;
-
-
-pub mod service_api;
-
-
-pub mod fba_inbound_api;
-pub mod fba_inventory_api;
-pub mod fba_outbound_api;
-
-
-pub mod supply_sources_api;
-
-
+pub mod aplus_content_2020_11_01;
+pub mod app_integrations_2024_04_01;
+pub mod application_2023_11_30;
+pub mod awd_2024_05_09;
 pub mod catalog_items_2020_12_01;
 pub mod catalog_items_2022_04_01;
 pub mod catalog_items_v0;
-
-
-pub mod app_integrations_api;
-
-
-pub mod tokens_api;
-
-
-pub mod queries_api;
-
-
-pub mod listings_items_2020_09_01;
-pub mod listings_items_2021_08_01;
-
-pub mod listings_restrictions_2021_08_01;
-
-pub mod vendor_orders_api;
-
-
-pub mod shipment_invoice_api;
-
-
-pub mod finances_v0;
+pub mod customer_feedback_2024_06_01;
+pub mod data_kiosk_2023_11_15;
+pub mod product_type_definitions_2020_09_01;
+pub mod easy_ship_2022_03_23;
+pub mod fba_inbound_eligibility_v1;
+pub mod fba_inventory_v1;
+pub mod feeds_2021_06_30;
 pub mod finances_2024_06_19;
-
-
-pub mod sellers_api;
-
-
-pub mod fees_api;
-
-
-pub mod messaging_api;
-
-
+pub mod finances_v0;
 pub mod fulfillment_inbound_2024_03_20;
 pub mod fulfillment_inbound_v0;
-
-
-pub mod replenishment_2022_11_07;
-
-
-pub mod reports_api;
-
-
-pub mod sales_api;
-
-
-pub mod uploads_api;
-
-
-pub mod automotive_api;
-pub mod vehicles_api;
-
-
-
-
-pub mod orders_v0_api;
-pub mod shipment_api;
-
-
-pub mod vendor_transaction_api;
-pub mod vendor_direct_fulfillment_shipping_2021_12_28;
-pub mod vendor_direct_fulfillment_shipping_v1;
-
-pub mod invoices_api;
-
-
-pub mod merchant_fulfillment_api;
-
-
-pub mod feeds_api;
-
-
-pub mod easy_ship_api;
-
-
-pub mod vendor_invoice_api;
-pub mod vendor_shipping_api;
-
-
-pub mod aplus_content_api;
-
-
-pub mod notifications_api;
-
-
-pub mod awd_api;
-
-
-pub mod vendor_payments_api;
-
-
-pub mod applications_api;
-
-
-pub mod accounts_api;
-pub mod transactions_api;
-pub mod transfer_preview_api;
-pub mod transfer_schedule_api;
-
-
-pub mod product_type_definitions_2020_09_01;
-
-
+pub mod fulfillment_outbound_2020_07_01;
+pub mod invoices_api_model_2024_06_19;
+pub mod listings_items_2020_09_01;
+pub mod listings_items_2021_08_01;
+pub mod listings_restrictions_2021_08_01;
+pub mod merchant_fulfillment_v0;
+pub mod messaging_v1;
+pub mod notifications_v1;
+pub mod orders_v0;
+pub mod orders_v0_shipment;
+pub mod product_fees_v0;
 pub mod product_pricing_2022_05_01;
 pub mod product_pricing_v0;
-
-
-pub mod solicitations_api;
-
-
-pub mod customer_feedback_api;
-
-
+pub mod replenishment_2022_11_07;
+pub mod reports_2021_06_30;
+pub mod sales_v1;
+pub mod seller_wallet_2024_03_01;
+pub mod sellers_v1;
+pub mod service_v1;
+pub mod shipment_invoicing_v0;
+pub mod shipping_v1;
+pub mod shipping_v2;
+pub mod solicitations_v1;
+pub mod supply_sources_2020_07_01;
+pub mod tokens_2021_03_01;
+pub mod transfers_2024_06_01;
+pub mod uploads_2020_11_01;
+pub mod vehicles_2024_11_01;
+pub mod vendor_direct_fulfillment_inventory_v1;
+pub mod vendor_direct_fulfillment_orders_2021_12_28;
+pub mod vendor_direct_fulfillment_orders_v1;
+pub mod vendor_direct_fulfillment_payments_v1;
+pub mod vendor_direct_fulfillment_sandbox_data_2021_10_28;
+pub mod vendor_direct_fulfillment_shipping_2021_12_28;
+pub mod vendor_direct_fulfillment_shipping_v1;
+pub mod vendor_direct_fulfillment_transactions_2021_12_28;
+pub mod vendor_direct_fulfillment_transactions_v1;
+pub mod vendor_invoices_v1;
+pub mod vendor_orders_v1;
+pub mod vendor_shipments_v1;
+pub mod vendor_transaction_status_v1;

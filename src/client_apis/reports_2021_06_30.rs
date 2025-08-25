@@ -12,17 +12,19 @@ use anyhow::Result;
 use tokio::time::sleep;
 
 impl SpapiClient {
+    /// Cancels the report that you specify. Only reports with `processingStatus=IN_QUEUE` can be cancelled. Cancelled reports are returned in subsequent calls to the `getReport` and `getReports` operations.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn cancel_report(&self, report_id: &str) -> Result<()> {
         let configuration = self.create_configuration().await?;
         let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports/{reportId}/cancel", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::cancel_report(&configuration, report_id).await?;
+        let res = crate::apis::reports_2021_06_30::cancel_report(&configuration, report_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Cancels the report schedule that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn cancel_report_schedule(&self, report_schedule_id: &str) -> Result<()> {
         let configuration = self.create_configuration().await?;
         let guard = self
@@ -33,13 +35,16 @@ impl SpapiClient {
                 15,
             )
             .await?;
-        let res =
-            crate::apis::reports_api::cancel_report_schedule(&configuration, report_schedule_id)
-                .await?;
+        let res = crate::apis::reports_2021_06_30::cancel_report_schedule(
+            &configuration,
+            report_schedule_id,
+        )
+        .await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Creates a report.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0167 | 15 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn create_report(
         &self,
         body: models::reports_2021_06_30::CreateReportSpecification,
@@ -49,11 +54,12 @@ impl SpapiClient {
             .limiter()
             .wait("/reports/v2021-06-30/reports", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::create_report(&configuration, body).await?;
+        let res = crate::apis::reports_2021_06_30::create_report(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Creates a report schedule. If a report schedule with the same report type and marketplace IDs already exists, it will be cancelled and replaced with this one.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn create_report_schedule(
         &self,
         body: models::reports_2021_06_30::CreateReportScheduleSpecification,
@@ -63,22 +69,25 @@ impl SpapiClient {
             .limiter()
             .wait("/reports/v2021-06-30/schedules", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::create_report_schedule(&configuration, body).await?;
+        let res =
+            crate::apis::reports_2021_06_30::create_report_schedule(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Returns report details (including the `reportDocumentId`, if available) for the report that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 15 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn get_report(&self, report_id: &str) -> Result<models::reports_2021_06_30::Report> {
         let configuration = self.create_configuration().await?;
         let guard = self
             .limiter()
             .wait("/reports/v2021-06-30/reports/{reportId}", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::get_report(&configuration, report_id).await?;
+        let res = crate::apis::reports_2021_06_30::get_report(&configuration, report_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Returns the information required for retrieving a report document's contents.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0167 | 15 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn get_report_document(
         &self,
         report_document_id: &str,
@@ -92,12 +101,16 @@ impl SpapiClient {
                 15,
             )
             .await?;
-        let res = crate::apis::reports_api::get_report_document(&configuration, report_document_id)
-            .await?;
+        let res = crate::apis::reports_2021_06_30::get_report_document(
+            &configuration,
+            report_document_id,
+        )
+        .await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Returns report schedule details for the report schedule that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn get_report_schedule(
         &self,
         report_schedule_id: &str,
@@ -111,12 +124,16 @@ impl SpapiClient {
                 15,
             )
             .await?;
-        let res = crate::apis::reports_api::get_report_schedule(&configuration, report_schedule_id)
-            .await?;
+        let res = crate::apis::reports_2021_06_30::get_report_schedule(
+            &configuration,
+            report_schedule_id,
+        )
+        .await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Returns report schedule details that match the filters that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn get_report_schedules(
         &self,
         report_types: Vec<String>,
@@ -127,11 +144,13 @@ impl SpapiClient {
             .wait("/reports/v2021-06-30/schedules", 0.016, 15)
             .await?;
         let res =
-            crate::apis::reports_api::get_report_schedules(&configuration, report_types).await?;
+            crate::apis::reports_2021_06_30::get_report_schedules(&configuration, report_types)
+                .await?;
         guard.mark_response().await;
         Ok(res)
     }
 
+    /// Returns report details for the reports that match the filters that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0222 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
     pub async fn get_reports(
         &self,
         report_types: Option<Vec<String>>,
@@ -147,7 +166,7 @@ impl SpapiClient {
             .limiter()
             .wait("/reports/v2021-06-30/reports", 0.016, 15)
             .await?;
-        let res = crate::apis::reports_api::get_reports(
+        let res = crate::apis::reports_2021_06_30::get_reports(
             &configuration,
             report_types,
             processing_statuses,

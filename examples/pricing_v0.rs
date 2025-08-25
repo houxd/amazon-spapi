@@ -1,5 +1,5 @@
 use anyhow::Result;
-use amazon_spapi::client::{SpapiClient, SpapiConfig};
+use amazon_spapi::{client::{SpapiClient, SpapiConfig}, marketplace_ids};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -11,7 +11,7 @@ async fn main() -> Result<()> {
     // println!("Item offers: {:?}", res);
 
     let res = client
-        .get_item_offers_batch_by_asins(vec!["B0DGJC52FP", "B0BN72FYFG"])
+        .get_item_offers_batch_by_asins(vec!["B0DGJC52FP", "B0BN72FYFG"], marketplace_ids::US)
         .await?;
     println!("Batch item offers: {:?}", res);
 

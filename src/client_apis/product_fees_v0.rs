@@ -22,7 +22,7 @@ impl SpapiClient {
             .limiter()
             .wait("/products/fees/v0/items/feesEstimate", 1.0, 2)
             .await?;
-        let res = crate::apis::fees_api::get_my_fees_estimate_for_asin(&configuration, asin, body)
+        let res = crate::apis::product_fees_v0::get_my_fees_estimate_for_asin(&configuration, asin, body)
             .await?;
         guard.mark_response().await;
         Ok(res)
@@ -39,7 +39,7 @@ impl SpapiClient {
             .wait("/products/fees/v0/listings/feesEstimate", 1.0, 2)
             .await?;
         let res =
-            crate::apis::fees_api::get_my_fees_estimate_for_sku(&configuration, seller_sku, body)
+            crate::apis::product_fees_v0::get_my_fees_estimate_for_sku(&configuration, seller_sku, body)
                 .await?;
         guard.mark_response().await;
         Ok(res)
@@ -54,7 +54,7 @@ impl SpapiClient {
             .limiter()
             .wait("/products/fees/v0/feesEstimate", 0.5, 1)
             .await?;
-        let res = crate::apis::fees_api::get_my_fees_estimates(&configuration, body).await?;
+        let res = crate::apis::product_fees_v0::get_my_fees_estimates(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -65,10 +65,11 @@ impl SpapiClient {
         asin: &str,
         price: f64,
         is_amazon_fulfilled: bool,
+        marketplace_id: &str,
     ) -> Result<f64> {
         let request = GetMyFeesEstimateRequest {
             fees_estimate_request: Some(Box::new(FeesEstimateRequest {
-                marketplace_id: self.get_marketplace_id().to_string(),
+                marketplace_id: marketplace_id.to_string(),
                 is_amazon_fulfilled: Some(is_amazon_fulfilled),
                 price_to_estimate_fees: Box::new(PriceToEstimateFees {
                     listing_price: Box::new(MoneyType {
@@ -108,12 +109,13 @@ impl SpapiClient {
         &self,
         asins_with_prices: Vec<(String, f64)>,
         is_amazon_fulfilled: bool,
+        marketplace_id: &str,
     ) -> Result<Vec<(String, f64)>> {
         let requests: Vec<FeesEstimateByIdRequest> = asins_with_prices
             .iter()
             .map(|(asin, price)| FeesEstimateByIdRequest {
                 fees_estimate_request: Some(Box::new(FeesEstimateRequest {
-                    marketplace_id: self.get_marketplace_id().to_string(),
+                    marketplace_id: marketplace_id.to_string(),
                     is_amazon_fulfilled: Some(is_amazon_fulfilled),
                     price_to_estimate_fees: Box::new(PriceToEstimateFees {
                         listing_price: Box::new(MoneyType {
@@ -163,10 +165,11 @@ impl SpapiClient {
         sku: &str,
         price: f64,
         is_amazon_fulfilled: bool,
+        marketplace_id: &str,
     ) -> Result<f64> {
         let request = GetMyFeesEstimateRequest {
             fees_estimate_request: Some(Box::new(FeesEstimateRequest {
-                marketplace_id: self.get_marketplace_id().to_string(),
+                marketplace_id: marketplace_id.to_string(),
                 is_amazon_fulfilled: Some(is_amazon_fulfilled),
                 price_to_estimate_fees: Box::new(PriceToEstimateFees {
                     listing_price: Box::new(MoneyType {
@@ -206,12 +209,13 @@ impl SpapiClient {
         &self,
         skus_with_prices: Vec<(String, f64)>,
         is_amazon_fulfilled: bool,
+        marketplace_id: &str,
     ) -> Result<Vec<(String, f64)>> {
         let requests: Vec<FeesEstimateByIdRequest> = skus_with_prices
             .iter()
             .map(|(sku, price)| FeesEstimateByIdRequest {
                 fees_estimate_request: Some(Box::new(FeesEstimateRequest {
-                    marketplace_id: self.get_marketplace_id().to_string(),
+                    marketplace_id: marketplace_id.to_string(),
                     is_amazon_fulfilled: Some(is_amazon_fulfilled),
                     price_to_estimate_fees: Box::new(PriceToEstimateFees {
                         listing_price: Box::new(MoneyType {

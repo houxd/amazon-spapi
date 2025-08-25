@@ -6,7 +6,7 @@ use std::vec;
 
 impl SpapiClient {
     /// Search for a list of Amazon catalog items and item-related information. You can search by identifier or by keywords.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 2 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-    pub async fn search_catalog_items(
+    pub async fn search_catalog_items_v2022_04_01(
         &self,
         marketplace_ids: Vec<String>,
         identifiers: Option<Vec<String>>,
@@ -47,7 +47,7 @@ impl SpapiClient {
     }
 
     /// Retrieves details for an item in the Amazon catalog.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 2 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-    pub async fn get_catalog_item(
+    pub async fn get_catalog_item_v2022_04_01(
         &self,
         asin: &str,
         marketplace_ids: Vec<String>,
@@ -79,7 +79,7 @@ impl SpapiClient {
         included_data: Option<Vec<String>>,
         locale: Option<&str>,
     ) -> Result<ItemSearchResults> {
-        self.search_catalog_items(
+        self.search_catalog_items_v2022_04_01(
             marketplace_ids,
             Some(vec![asin.to_string()]),
             Some("ASIN"),
@@ -108,7 +108,7 @@ impl SpapiClient {
         page_token: Option<&str>,
         keywords_locale: Option<&str>,
     ) -> Result<ItemSearchResults> {
-        self.search_catalog_items(
+        self.search_catalog_items_v2022_04_01(
             marketplace_ids,
             None,
             None,

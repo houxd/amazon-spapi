@@ -1,4 +1,4 @@
-use amazon_spapi::client::{SpapiClient, SpapiConfig};
+use amazon_spapi::{client::{SpapiClient, SpapiConfig}, marketplace_ids};
 use anyhow::Result;
 
 #[tokio::main]
@@ -12,7 +12,7 @@ async fn main() -> Result<()> {
     println!("Current local time: {}", current_local_time);
     {
         let fees = client
-            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true)
+            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true, marketplace_ids::US)
             .await?;
         println!("Fees for ASINs: {:?}", fees);
     }
@@ -20,7 +20,7 @@ async fn main() -> Result<()> {
     println!("Current local time: {}", current_local_time);
     {
         let fees = client
-            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true)
+            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true, marketplace_ids::US)
             .await?;
         println!("Fees for ASINs: {:?}", fees);
     }
@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
     println!("Current local time: {}", current_local_time);
     {
         let fees = client
-            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true)
+            .get_fees_for_asins(vec![("B0DGJC52FP".to_string(), 999.0)], true, marketplace_ids::US)
             .await?;
         println!("Fees for ASINs: {:?}", fees);
     }

@@ -7,7 +7,6 @@ pub struct SpapiConfig {
     pub client_id: String,
     pub client_secret: String,
     pub refresh_token: String,
-    pub marketplace_id: String,
     pub region: String,
     pub sandbox: bool,
     pub user_agent: Option<String>,
@@ -26,9 +25,6 @@ impl SpapiConfig {
         let refresh_token = std::env::var("SPAPI_REFRESH_TOKEN").map_err(|_| {
             anyhow::anyhow!("SPAPI_REFRESH_TOKEN environment variable is not set")
         })?;
-        let marketplace_id = std::env::var("SPAPI_MARKETPLACE_ID").map_err(|_| {
-            anyhow::anyhow!("SPAPI_MARKETPLACE_ID environment variable is not set")
-        })?;
         let region = std::env::var("SPAPI_REGION").map_err(|_| {
             anyhow::anyhow!("SPAPI_REGION environment variable is not set")
         })?;
@@ -40,7 +36,6 @@ impl SpapiConfig {
             client_id,
             client_secret,
             refresh_token,
-            marketplace_id,
             region,
             sandbox,
             user_agent: None,

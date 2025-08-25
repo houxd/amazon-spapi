@@ -77,11 +77,6 @@ impl SpapiClient {
         }
     }
 
-    /// Get the region for the client
-    pub fn get_marketplace_id(&self) -> &str {
-        &self.config.marketplace_id
-    }
-
     /// Get access token from the auth client
     pub async fn get_access_token(&self) -> Result<String> {
         let mut auth_client = self.auth_client.lock().await;

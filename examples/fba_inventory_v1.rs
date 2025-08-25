@@ -1,6 +1,5 @@
 use amazon_spapi::{
-    client::{SpapiClient, SpapiConfig},
-    models::fba_inventory::InventorySummary,
+    client::{SpapiClient, SpapiConfig}, marketplace_ids, models::fba_inventory::InventorySummary
 };
 use anyhow::Result;
 
@@ -13,8 +12,8 @@ async fn get_inventory_summaries_all(
 
     loop {
         let granularity_type = "Marketplace";
-        let granularity_id = spapi.get_marketplace_id();
-        let marketplace_ids = vec![spapi.get_marketplace_id().to_string()];
+        let granularity_id = marketplace_ids::US;
+        let marketplace_ids = vec![marketplace_ids::US.to_string()];
 
         let inventory = spapi
             .get_inventory_summaries(

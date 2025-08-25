@@ -19,14 +19,14 @@ use super::{Error, configuration, ContentType};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetOrderError {
-    Status400(models::GetOrderResponse),
-    Status401(models::GetOrderResponse),
-    Status403(models::GetOrderResponse),
-    Status404(models::GetOrderResponse),
-    Status415(models::GetOrderResponse),
-    Status429(models::GetOrderResponse),
-    Status500(models::GetOrderResponse),
-    Status503(models::GetOrderResponse),
+    Status400(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status401(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status403(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status404(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status415(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status429(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status500(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
+    Status503(models::vendor_direct_fulfillment_orders_v1::GetOrderResponse),
     UnknownValue(serde_json::Value),
 }
 
@@ -34,13 +34,13 @@ pub enum GetOrderError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetOrdersError {
-    Status400(models::GetOrdersResponse),
-    Status403(models::GetOrdersResponse),
-    Status404(models::GetOrdersResponse),
-    Status415(models::GetOrdersResponse),
-    Status429(models::GetOrdersResponse),
-    Status500(models::GetOrdersResponse),
-    Status503(models::GetOrdersResponse),
+    Status400(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status403(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status404(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status415(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status429(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status500(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
+    Status503(models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse),
     UnknownValue(serde_json::Value),
 }
 
@@ -48,20 +48,20 @@ pub enum GetOrdersError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SubmitAcknowledgementError {
-    Status400(models::SubmitAcknowledgementResponse),
-    Status403(models::SubmitAcknowledgementResponse),
-    Status404(models::SubmitAcknowledgementResponse),
-    Status413(models::SubmitAcknowledgementResponse),
-    Status415(models::SubmitAcknowledgementResponse),
-    Status429(models::SubmitAcknowledgementResponse),
-    Status500(models::SubmitAcknowledgementResponse),
-    Status503(models::SubmitAcknowledgementResponse),
+    Status400(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status403(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status404(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status413(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status415(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status429(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status500(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
+    Status503(models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse),
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns purchase order information for the purchaseOrderNumber that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 10 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_order(configuration: &configuration::Configuration, purchase_order_number: &str) -> Result<models::GetOrderResponse, Error<GetOrderError>> {
+pub async fn get_order(configuration: &configuration::Configuration, purchase_order_number: &str) -> Result<models::vendor_direct_fulfillment_orders_v1::GetOrderResponse, Error<GetOrderError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_purchase_order_number = purchase_order_number;
 
@@ -98,7 +98,7 @@ pub async fn get_order(configuration: &configuration::Configuration, purchase_or
 }
 
 /// Returns a list of purchase orders created during the time frame that you specify. You define the time frame using the createdAfter and createdBefore parameters. You must use both parameters. You can choose to get only the purchase order numbers by setting the includeDetails parameter to false. In that case, the operation returns a list of purchase order numbers. You can then call the getOrder operation to return the details of a specific order.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 10 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_orders(configuration: &configuration::Configuration, created_after: String, created_before: String, ship_from_party_id: Option<&str>, status: Option<&str>, limit: Option<i64>, sort_order: Option<&str>, next_token: Option<&str>, include_details: Option<&str>) -> Result<models::GetOrdersResponse, Error<GetOrdersError>> {
+pub async fn get_orders(configuration: &configuration::Configuration, created_after: String, created_before: String, ship_from_party_id: Option<&str>, status: Option<&str>, limit: Option<i64>, sort_order: Option<&str>, next_token: Option<&str>, include_details: Option<&str>) -> Result<models::vendor_direct_fulfillment_orders_v1::GetOrdersResponse, Error<GetOrdersError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_created_after = created_after;
     let p_created_before = created_before;
@@ -162,7 +162,7 @@ pub async fn get_orders(configuration: &configuration::Configuration, created_af
 }
 
 /// Submits acknowledgements for one or more purchase orders.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 10 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn submit_acknowledgement(configuration: &configuration::Configuration, body: models::SubmitAcknowledgementRequest) -> Result<models::SubmitAcknowledgementResponse, Error<SubmitAcknowledgementError>> {
+pub async fn submit_acknowledgement(configuration: &configuration::Configuration, body: models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementRequest) -> Result<models::vendor_direct_fulfillment_orders_v1::SubmitAcknowledgementResponse, Error<SubmitAcknowledgementError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_body = body;
 

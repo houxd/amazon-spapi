@@ -1,4 +1,4 @@
-use amazon_spapi::apis::sellers_api::get_marketplace_participations;
+use amazon_spapi::apis::sellers_v1::get_marketplace_participations;
 use amazon_spapi::client::{SpapiClient, SpapiConfig};
 use anyhow::Result;
 

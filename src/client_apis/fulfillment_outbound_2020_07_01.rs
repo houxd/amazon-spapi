@@ -17,7 +17,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::cancel_fulfillment_order(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::cancel_fulfillment_order(
             &configuration,
             seller_fulfillment_order_id,
         )
@@ -41,7 +41,7 @@ impl SpapiClient {
             )
             .await?;
         let res =
-            crate::apis::fba_outbound_api::create_fulfillment_order(&configuration, body).await?;
+            crate::apis::fulfillment_outbound_2020_07_01::create_fulfillment_order(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -61,7 +61,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::create_fulfillment_return(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::create_fulfillment_return(
             &configuration,
             seller_fulfillment_order_id,
             body,
@@ -81,7 +81,7 @@ impl SpapiClient {
             .limiter()
             .wait("fulfillment_outbound_2020_07_01/delivery_offers", 5.0, 30)
             .await?;
-        let res = crate::apis::fba_outbound_api::delivery_offers(&configuration, body).await?;
+        let res = crate::apis::fulfillment_outbound_2020_07_01::delivery_offers(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -103,7 +103,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::get_feature_inventory(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::get_feature_inventory(
             &configuration,
             marketplace_id,
             feature_name,
@@ -127,7 +127,7 @@ impl SpapiClient {
             .limiter()
             .wait("fulfillment_outbound_2020_07_01/get_feature_sku", 2.0, 30)
             .await?;
-        let res = crate::apis::fba_outbound_api::get_feature_sku(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::get_feature_sku(
             &configuration,
             marketplace_id,
             feature_name,
@@ -149,7 +149,7 @@ impl SpapiClient {
             .wait("fulfillment_outbound_2020_07_01/get_features", 2.0, 30)
             .await?;
         let res =
-            crate::apis::fba_outbound_api::get_features(&configuration, marketplace_id).await?;
+            crate::apis::fulfillment_outbound_2020_07_01::get_features(&configuration, marketplace_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -168,7 +168,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::get_fulfillment_order(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::get_fulfillment_order(
             &configuration,
             seller_fulfillment_order_id,
         )
@@ -192,7 +192,7 @@ impl SpapiClient {
             )
             .await?;
         let res =
-            crate::apis::fba_outbound_api::get_fulfillment_preview(&configuration, body).await?;
+            crate::apis::fulfillment_outbound_2020_07_01::get_fulfillment_preview(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -211,7 +211,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::get_package_tracking_details(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::get_package_tracking_details(
             &configuration,
             package_number,
         )
@@ -235,7 +235,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::list_all_fulfillment_orders(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::list_all_fulfillment_orders(
             &configuration,
             query_start_date,
             next_token,
@@ -262,7 +262,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::list_return_reason_codes(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::list_return_reason_codes(
             &configuration,
             seller_sku,
             marketplace_id,
@@ -290,7 +290,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::submit_fulfillment_order_status_update(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::submit_fulfillment_order_status_update(
             &configuration,
             seller_fulfillment_order_id,
             body,
@@ -315,7 +315,7 @@ impl SpapiClient {
                 30,
             )
             .await?;
-        let res = crate::apis::fba_outbound_api::update_fulfillment_order(
+        let res = crate::apis::fulfillment_outbound_2020_07_01::update_fulfillment_order(
             &configuration,
             seller_fulfillment_order_id,
             body,

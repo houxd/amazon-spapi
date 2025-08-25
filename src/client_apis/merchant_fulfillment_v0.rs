@@ -14,7 +14,7 @@ impl SpapiClient {
             .wait("merchant_fulfillment_v0/cancel_shipment", 1.0, 1)
             .await?;
         let res =
-            crate::apis::merchant_fulfillment_api::cancel_shipment(&configuration, shipment_id)
+            crate::apis::merchant_fulfillment_v0::cancel_shipment(&configuration, shipment_id)
                 .await?;
         guard.mark_response().await;
         Ok(res)
@@ -31,7 +31,7 @@ impl SpapiClient {
             .wait("merchant_fulfillment_v0/create_shipment", 2.0, 2)
             .await?;
         let res =
-            crate::apis::merchant_fulfillment_api::create_shipment(&configuration, body).await?;
+            crate::apis::merchant_fulfillment_v0::create_shipment(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -50,7 +50,7 @@ impl SpapiClient {
                 1,
             )
             .await?;
-        let res = crate::apis::merchant_fulfillment_api::get_additional_seller_inputs(
+        let res = crate::apis::merchant_fulfillment_v0::get_additional_seller_inputs(
             &configuration,
             body,
         )
@@ -73,7 +73,7 @@ impl SpapiClient {
                 12,
             )
             .await?;
-        let res = crate::apis::merchant_fulfillment_api::get_eligible_shipment_services(
+        let res = crate::apis::merchant_fulfillment_v0::get_eligible_shipment_services(
             &configuration,
             body,
         )
@@ -92,7 +92,7 @@ impl SpapiClient {
             .limiter()
             .wait("merchant_fulfillment_v0/get_shipment", 1.0, 1)
             .await?;
-        let res = crate::apis::merchant_fulfillment_api::get_shipment(&configuration, shipment_id)
+        let res = crate::apis::merchant_fulfillment_v0::get_shipment(&configuration, shipment_id)
             .await?;
         guard.mark_response().await;
         Ok(res)

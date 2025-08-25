@@ -19,20 +19,20 @@ use super::{Error, configuration, ContentType};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetTransactionStatusError {
-    Status400(models::GetTransactionResponse),
-    Status401(models::GetTransactionResponse),
-    Status403(models::GetTransactionResponse),
-    Status404(models::GetTransactionResponse),
-    Status415(models::GetTransactionResponse),
-    Status429(models::GetTransactionResponse),
-    Status500(models::GetTransactionResponse),
-    Status503(models::GetTransactionResponse),
+    Status400(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status401(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status403(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status404(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status415(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status429(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status500(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
+    Status503(models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse),
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns the status of the transaction indicated by the specified transactionId.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 10 | 10 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_transaction_status(configuration: &configuration::Configuration, transaction_id: &str) -> Result<models::GetTransactionResponse, Error<GetTransactionStatusError>> {
+pub async fn get_transaction_status(configuration: &configuration::Configuration, transaction_id: &str) -> Result<models::vendor_direct_fulfillment_transactions_v1::GetTransactionResponse, Error<GetTransactionStatusError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_transaction_id = transaction_id;
 

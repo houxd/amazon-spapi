@@ -5,7 +5,8 @@ use std::collections::HashSet;
 use std::vec;
 
 impl SpapiClient {
-    pub async fn get_catalog_item_v2020_12_01(
+    /// Retrieves details for an item in the Amazon catalog.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 2 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](doc:usage-plans-and-rate-limits-in-the-sp-api).
+    pub async fn get_catalog_item(
         &self,
         asin: &str,
         marketplace_ids: Vec<String>,
@@ -28,7 +29,9 @@ impl SpapiClient {
         guard.mark_response().await;
         Ok(res)
     }
-    pub async fn search_catalog_items_v2020_12_01(
+    
+    /// Search for and return a list of Amazon catalog items and associated information.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 2 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The table above indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may see higher rate and burst values than those shown here. For more information, see [Usage Plans and Rate Limits in the Selling Partner API](doc:usage-plans-and-rate-limits-in-the-sp-api).
+    pub async fn search_catalog_items(
         &self,
         keywords: Vec<String>,
         marketplace_ids: Vec<String>,

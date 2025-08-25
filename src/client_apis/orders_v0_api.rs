@@ -15,7 +15,7 @@ impl SpapiClient {
             .wait("orders_v0/confirm_shipment", 2.0, 10)
             .await?;
         let res =
-            crate::apis::orders_v0_api::confirm_shipment(&configuration, order_id, payload).await?;
+            crate::apis::orders_v0::confirm_shipment(&configuration, order_id, payload).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -24,7 +24,7 @@ impl SpapiClient {
     pub async fn get_order(&self, order_id: &str) -> Result<models::orders_v0::GetOrderResponse> {
         let configuration = self.create_configuration().await?;
         let guard = self.limiter().wait("orders_v0/get_order", 0.5, 30).await?;
-        let res = crate::apis::orders_v0_api::get_order(&configuration, order_id).await?;
+        let res = crate::apis::orders_v0::get_order(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -39,7 +39,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_order_address", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0_api::get_order_address(&configuration, order_id).await?;
+        let res = crate::apis::orders_v0::get_order_address(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -55,7 +55,7 @@ impl SpapiClient {
             .wait("orders_v0/get_order_buyer_info", 0.5, 30)
             .await?;
         let res =
-            crate::apis::orders_v0_api::get_order_buyer_info(&configuration, order_id).await?;
+            crate::apis::orders_v0::get_order_buyer_info(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -71,7 +71,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_order_items", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0_api::get_order_items(&configuration, order_id, next_token)
+        let res = crate::apis::orders_v0::get_order_items(&configuration, order_id, next_token)
             .await?;
         guard.mark_response().await;
         Ok(res)
@@ -88,7 +88,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_order_items_buyer_info", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0_api::get_order_items_buyer_info(
+        let res = crate::apis::orders_v0::get_order_items_buyer_info(
             &configuration,
             order_id,
             next_token,
@@ -109,7 +109,7 @@ impl SpapiClient {
             .wait("orders_v0/get_order_regulated_info", 0.5, 30)
             .await?;
         let res =
-            crate::apis::orders_v0_api::get_order_regulated_info(&configuration, order_id).await?;
+            crate::apis::orders_v0::get_order_regulated_info(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -145,7 +145,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_orders", 0.0167, 20)
             .await?;
-        let res = crate::apis::orders_v0_api::get_orders(
+        let res = crate::apis::orders_v0::get_orders(
             &configuration,
             marketplace_ids,
             created_after,
@@ -186,7 +186,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/update_verification_status", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0_api::update_verification_status(
+        let res = crate::apis::orders_v0::update_verification_status(
             &configuration,
             order_id,
             payload,

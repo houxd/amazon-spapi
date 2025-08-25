@@ -10,7 +10,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/cancel_inbound", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::cancel_inbound(&configuration, order_id).await?;
+        let res = crate::apis::awd_2024_05_09::cancel_inbound(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -25,7 +25,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/check_inbound_eligibility", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::check_inbound_eligibility(&configuration, body).await?;
+        let res = crate::apis::awd_2024_05_09::check_inbound_eligibility(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -37,7 +37,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/confirm_inbound", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::confirm_inbound(&configuration, order_id).await?;
+        let res = crate::apis::awd_2024_05_09::confirm_inbound(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -52,7 +52,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/create_inbound", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::create_inbound(&configuration, body).await?;
+        let res = crate::apis::awd_2024_05_09::create_inbound(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -67,7 +67,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/get_inbound", 2.0, 2)
             .await?;
-        let res = crate::apis::awd_api::get_inbound(&configuration, order_id).await?;
+        let res = crate::apis::awd_2024_05_09::get_inbound(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -84,7 +84,7 @@ impl SpapiClient {
             .wait("awd_2024_05_09/get_inbound_shipment", 2.0, 2)
             .await?;
         let res =
-            crate::apis::awd_api::get_inbound_shipment(&configuration, shipment_id, sku_quantities)
+            crate::apis::awd_2024_05_09::get_inbound_shipment(&configuration, shipment_id, sku_quantities)
                 .await?;
         guard.mark_response().await;
         Ok(res)
@@ -102,7 +102,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/get_inbound_shipment_labels", 1.0, 2)
             .await?;
-        let res = crate::apis::awd_api::get_inbound_shipment_labels(
+        let res = crate::apis::awd_2024_05_09::get_inbound_shipment_labels(
             &configuration,
             shipment_id,
             page_type,
@@ -129,7 +129,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/list_inbound_shipments", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::list_inbound_shipments(
+        let res = crate::apis::awd_2024_05_09::list_inbound_shipments(
             &configuration,
             sort_by,
             sort_order,
@@ -158,7 +158,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/list_inventory", 2.0, 2)
             .await?;
-        let res = crate::apis::awd_api::list_inventory(
+        let res = crate::apis::awd_2024_05_09::list_inventory(
             &configuration,
             sku,
             sort_order,
@@ -182,7 +182,7 @@ impl SpapiClient {
             .limiter()
             .wait("awd_2024_05_09/update_inbound", 1.0, 1)
             .await?;
-        let res = crate::apis::awd_api::update_inbound(&configuration, order_id, body).await?;
+        let res = crate::apis::awd_2024_05_09::update_inbound(&configuration, order_id, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -202,7 +202,7 @@ impl SpapiClient {
                 1,
             )
             .await?;
-        let res = crate::apis::awd_api::update_inbound_shipment_transport_details(
+        let res = crate::apis::awd_2024_05_09::update_inbound_shipment_transport_details(
             &configuration,
             shipment_id,
             body,

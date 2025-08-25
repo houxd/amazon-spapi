@@ -9,7 +9,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/cancel_feed", 2.0, 15)
             .await?;
-        let res = apis::feeds_api::cancel_feed(&configuration, feed_id).await?;
+        let res = apis::feeds_2021_06_30::cancel_feed(&configuration, feed_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -24,7 +24,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/create_feed", 0.0083, 15)
             .await?;
-        let res = apis::feeds_api::create_feed(&configuration, body).await?;
+        let res = apis::feeds_2021_06_30::create_feed(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -39,7 +39,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/create_feed_document", 0.5, 15)
             .await?;
-        let res = apis::feeds_api::create_feed_document(&configuration, body).await?;
+        let res = apis::feeds_2021_06_30::create_feed_document(&configuration, body).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -51,7 +51,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/get_feed", 2.0, 15)
             .await?;
-        let res = apis::feeds_api::get_feed(&configuration, feed_id).await?;
+        let res = apis::feeds_2021_06_30::get_feed(&configuration, feed_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -66,7 +66,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/get_feed_document", 0.0222, 10)
             .await?;
-        let res = apis::feeds_api::get_feed_document(&configuration, feed_document_id).await?;
+        let res = apis::feeds_2021_06_30::get_feed_document(&configuration, feed_document_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -87,7 +87,7 @@ impl SpapiClient {
             .limiter()
             .wait("/feeds/2021-06-30/get_feeds", 0.0222, 10)
             .await?;
-        let res = apis::feeds_api::get_feeds(
+        let res = apis::feeds_2021_06_30::get_feeds(
             &configuration,
             feed_types,
             marketplace_ids,

@@ -15,6 +15,21 @@ use crate::{apis::ResponseContent, models};
 use super::{Error, configuration, ContentType};
 
 
+/// struct for typed errors of method [`generate_order_scenarios`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GenerateOrderScenariosError {
+    Status400(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status403(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status404(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status413(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status415(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status429(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status500(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    Status503(models::vendor_direct_fulfillment_sandbox_data_2021_10_28::ErrorList),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`get_order_scenarios`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -30,6 +45,43 @@ pub enum GetOrderScenariosError {
     UnknownValue(serde_json::Value),
 }
 
+/// Submits a request to generate test order data for Vendor Direct Fulfillment API entities.
+pub async fn generate_order_scenarios(configuration: &configuration::Configuration, body: models::vendor_direct_fulfillment_sandbox_data_2021_10_28::GenerateOrderScenarioRequest) -> Result<models::vendor_direct_fulfillment_sandbox_data_2021_10_28::TransactionReference, Error<GenerateOrderScenariosError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_body = body;
+
+    let uri_str = format!("{}/vendor/directFulfillment/sandbox/2021-10-28/orders", configuration.base_path);
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_body);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+    let content_type = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("application/octet-stream");
+    let content_type = super::ContentType::from(content_type);
+
+    if !status.is_client_error() && !status.is_server_error() {
+        let content = resp.text().await?;
+        match content_type {
+            ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
+            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::vendor_direct_fulfillment_sandbox_data_2021_10_28::TransactionReference`"))),
+            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::vendor_direct_fulfillment_sandbox_data_2021_10_28::TransactionReference`")))),
+        }
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<GenerateOrderScenariosError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}
 
 /// Returns the status of the transaction indicated by the specified transactionId. If the transaction was successful, also returns the requested test order data.
 pub async fn get_order_scenarios(configuration: &configuration::Configuration, transaction_id: &str) -> Result<models::vendor_direct_fulfillment_sandbox_data_2021_10_28::TransactionStatus, Error<GetOrderScenariosError>> {
@@ -67,4 +119,3 @@ pub async fn get_order_scenarios(configuration: &configuration::Configuration, t
         Err(Error::ResponseError(ResponseContent { status, content, entity }))
     }
 }
-
