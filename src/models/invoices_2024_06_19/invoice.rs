@@ -40,7 +40,7 @@ pub struct Invoice {
     pub status: Option<String>,
     /// List with identifiers for the transactions associated to the invoice.
     #[serde(rename = "transactionIds", skip_serializing_if = "Option::is_none")]
-    pub transaction_ids: Option<Vec<models::invoices_api_model_2024_06_19::TransactionIdentifier>>,
+    pub transaction_ids: Option<Vec<models::invoices_2024_06_19::TransactionIdentifier>>,
     /// Classification of the transaction that originated this invoice. Use the `getInvoicesAttributes` operation to check `transactionType` options.
     #[serde(rename = "transactionType", skip_serializing_if = "Option::is_none")]
     pub transaction_type: Option<String>,

@@ -11,22 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// GetInvoicesExportsResponse : Success.
+/// GetInvoicesResponse : Success.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetInvoicesExportsResponse {
-    /// A list of exports.
-    #[serde(rename = "exports", skip_serializing_if = "Option::is_none")]
-    pub exports: Option<Vec<models::invoices_api_model_2024_06_19::Export>>,
+pub struct GetInvoicesResponse {
+    /// A list of invoices.
+    #[serde(rename = "invoices", skip_serializing_if = "Option::is_none")]
+    pub invoices: Option<Vec<models::invoices_2024_06_19::Invoice>>,
     /// This token is returned when the number of results exceeds the specified `pageSize` value. To get the next page of results, call the `getInvoices` operation and include this token with the previous call parameters.
     #[serde(rename = "nextToken", skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-impl GetInvoicesExportsResponse {
+impl GetInvoicesResponse {
     /// Success.
-    pub fn new() -> GetInvoicesExportsResponse {
-        GetInvoicesExportsResponse {
-            exports: None,
+    pub fn new() -> GetInvoicesResponse {
+        GetInvoicesResponse {
+            invoices: None,
             next_token: None,
         }
     }

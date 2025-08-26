@@ -11,18 +11,18 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// GetInvoicesExportResponse : Success.
+/// GetInvoiceResponse : Success.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetInvoicesExportResponse {
-    #[serde(rename = "export", skip_serializing_if = "Option::is_none")]
-    pub export: Option<Box<models::invoices_api_model_2024_06_19::Export>>,
+pub struct GetInvoiceResponse {
+    #[serde(rename = "invoice", skip_serializing_if = "Option::is_none")]
+    pub invoice: Option<Box<models::invoices_2024_06_19::Invoice>>,
 }
 
-impl GetInvoicesExportResponse {
+impl GetInvoiceResponse {
     /// Success.
-    pub fn new() -> GetInvoicesExportResponse {
-        GetInvoicesExportResponse {
-            export: None,
+    pub fn new() -> GetInvoiceResponse {
+        GetInvoiceResponse {
+            invoice: None,
         }
     }
 }

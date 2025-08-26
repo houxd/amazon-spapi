@@ -11,18 +11,18 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// GetInvoicesDocumentResponse : Success.
+/// GetInvoicesAttributesResponse : Success.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetInvoicesDocumentResponse {
-    #[serde(rename = "invoicesDocument", skip_serializing_if = "Option::is_none")]
-    pub invoices_document: Option<Box<models::invoices_api_model_2024_06_19::InvoicesDocument>>,
+pub struct GetInvoicesAttributesResponse {
+    #[serde(rename = "invoicesAttributes", skip_serializing_if = "Option::is_none")]
+    pub invoices_attributes: Option<Box<models::invoices_2024_06_19::InvoicesAttributes>>,
 }
 
-impl GetInvoicesDocumentResponse {
+impl GetInvoicesAttributesResponse {
     /// Success.
-    pub fn new() -> GetInvoicesDocumentResponse {
-        GetInvoicesDocumentResponse {
-            invoices_document: None,
+    pub fn new() -> GetInvoicesAttributesResponse {
+        GetInvoicesAttributesResponse {
+            invoices_attributes: None,
         }
     }
 }

@@ -24,7 +24,7 @@ pub struct ExportInvoicesRequest {
     #[serde(rename = "externalInvoiceId", skip_serializing_if = "Option::is_none")]
     pub external_invoice_id: Option<String>,
     #[serde(rename = "fileFormat", skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<models::invoices_api_model_2024_06_19::FileFormat>,
+    pub file_format: Option<models::invoices_2024_06_19::FileFormat>,
     /// The marketplace-specific classification of the invoice type. Use the `getInvoicesAttributes` operation to check `invoiceType` options.
     #[serde(rename = "invoiceType", skip_serializing_if = "Option::is_none")]
     pub invoice_type: Option<String>,
@@ -38,7 +38,7 @@ pub struct ExportInvoicesRequest {
     #[serde(rename = "statuses", skip_serializing_if = "Option::is_none")]
     pub statuses: Option<Vec<String>>,
     #[serde(rename = "transactionIdentifier", skip_serializing_if = "Option::is_none")]
-    pub transaction_identifier: Option<Box<models::invoices_api_model_2024_06_19::TransactionIdentifier>>,
+    pub transaction_identifier: Option<Box<models::invoices_2024_06_19::TransactionIdentifier>>,
     /// The marketplace-specific classification of the transaction type for which the invoice was created. Use the `getInvoicesAttributes` operation to check `transactionType` options
     #[serde(rename = "transactionType", skip_serializing_if = "Option::is_none")]
     pub transaction_type: Option<String>,

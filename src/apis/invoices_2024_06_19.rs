@@ -19,15 +19,15 @@ use super::{Error, configuration, ContentType};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateInvoicesExportError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -35,15 +35,15 @@ pub enum CreateInvoicesExportError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoiceError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -51,15 +51,15 @@ pub enum GetInvoiceError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoicesError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -67,15 +67,15 @@ pub enum GetInvoicesError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoicesAttributesError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -83,15 +83,15 @@ pub enum GetInvoicesAttributesError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoicesDocumentError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -99,15 +99,15 @@ pub enum GetInvoicesDocumentError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoicesExportError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
@@ -115,21 +115,21 @@ pub enum GetInvoicesExportError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetInvoicesExportsError {
-    Status400(models::invoices_api_model_2024_06_19::ErrorList),
-    Status401(models::invoices_api_model_2024_06_19::ErrorList),
-    Status403(models::invoices_api_model_2024_06_19::ErrorList),
-    Status404(models::invoices_api_model_2024_06_19::ErrorList),
-    Status413(models::invoices_api_model_2024_06_19::ErrorList),
-    Status415(models::invoices_api_model_2024_06_19::ErrorList),
-    Status429(models::invoices_api_model_2024_06_19::ErrorList),
-    Status500(models::invoices_api_model_2024_06_19::ErrorList),
-    Status503(models::invoices_api_model_2024_06_19::ErrorList),
+    Status400(models::invoices_2024_06_19::ErrorList),
+    Status401(models::invoices_2024_06_19::ErrorList),
+    Status403(models::invoices_2024_06_19::ErrorList),
+    Status404(models::invoices_2024_06_19::ErrorList),
+    Status413(models::invoices_2024_06_19::ErrorList),
+    Status415(models::invoices_2024_06_19::ErrorList),
+    Status429(models::invoices_2024_06_19::ErrorList),
+    Status500(models::invoices_2024_06_19::ErrorList),
+    Status503(models::invoices_2024_06_19::ErrorList),
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates an invoice export request.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.167 | 1 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn create_invoices_export(configuration: &configuration::Configuration, body: models::invoices_api_model_2024_06_19::ExportInvoicesRequest) -> Result<models::invoices_api_model_2024_06_19::ExportInvoicesResponse, Error<CreateInvoicesExportError>> {
+pub async fn create_invoices_export(configuration: &configuration::Configuration, body: models::invoices_2024_06_19::ExportInvoicesRequest) -> Result<models::invoices_2024_06_19::ExportInvoicesResponse, Error<CreateInvoicesExportError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_body = body;
 
@@ -167,7 +167,7 @@ pub async fn create_invoices_export(configuration: &configuration::Configuration
 }
 
 /// Returns invoice data for the specified invoice. This operation returns only a subset of the invoices data; refer to the response definition to get all the possible attributes. To get the full invoice, use the `createInvoicesExport` operation to start an export request.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 15 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoice(configuration: &configuration::Configuration, marketplace_id: &str, invoice_id: &str) -> Result<models::invoices_api_model_2024_06_19::GetInvoiceResponse, Error<GetInvoiceError>> {
+pub async fn get_invoice(configuration: &configuration::Configuration, marketplace_id: &str, invoice_id: &str) -> Result<models::invoices_2024_06_19::GetInvoiceResponse, Error<GetInvoiceError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_marketplace_id = marketplace_id;
     let p_invoice_id = invoice_id;
@@ -206,7 +206,7 @@ pub async fn get_invoice(configuration: &configuration::Configuration, marketpla
 }
 
 /// Returns invoice details for the invoices that match the filters that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.1 | 20 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoices(configuration: &configuration::Configuration, marketplace_id: &str, transaction_identifier_name: Option<&str>, page_size: Option<i32>, date_end: Option<String>, transaction_type: Option<&str>, transaction_identifier_id: Option<&str>, date_start: Option<String>, series: Option<&str>, next_token: Option<&str>, sort_order: Option<&str>, invoice_type: Option<&str>, statuses: Option<Vec<String>>, external_invoice_id: Option<&str>, sort_by: Option<&str>) -> Result<models::invoices_api_model_2024_06_19::GetInvoicesResponse, Error<GetInvoicesError>> {
+pub async fn get_invoices(configuration: &configuration::Configuration, marketplace_id: &str, transaction_identifier_name: Option<&str>, page_size: Option<i32>, date_end: Option<String>, transaction_type: Option<&str>, transaction_identifier_id: Option<&str>, date_start: Option<String>, series: Option<&str>, next_token: Option<&str>, sort_order: Option<&str>, invoice_type: Option<&str>, statuses: Option<Vec<String>>, external_invoice_id: Option<&str>, sort_by: Option<&str>) -> Result<models::invoices_2024_06_19::GetInvoicesResponse, Error<GetInvoicesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_marketplace_id = marketplace_id;
     let p_transaction_identifier_name = transaction_identifier_name;
@@ -299,7 +299,7 @@ pub async fn get_invoices(configuration: &configuration::Configuration, marketpl
 }
 
 /// Returns marketplace-dependent schemas and their respective set of possible values.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 1 | 1 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoices_attributes(configuration: &configuration::Configuration, marketplace_id: &str) -> Result<models::invoices_api_model_2024_06_19::GetInvoicesAttributesResponse, Error<GetInvoicesAttributesError>> {
+pub async fn get_invoices_attributes(configuration: &configuration::Configuration, marketplace_id: &str) -> Result<models::invoices_2024_06_19::GetInvoicesAttributesResponse, Error<GetInvoicesAttributesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_marketplace_id = marketplace_id;
 
@@ -337,7 +337,7 @@ pub async fn get_invoices_attributes(configuration: &configuration::Configuratio
 }
 
 /// Returns the invoice document's ID and URL. Use the URL to download the ZIP file, which contains the invoices from the corresponding `createInvoicesExport` request.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.0167 | 1 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoices_document(configuration: &configuration::Configuration, invoices_document_id: &str) -> Result<models::invoices_api_model_2024_06_19::GetInvoicesDocumentResponse, Error<GetInvoicesDocumentError>> {
+pub async fn get_invoices_document(configuration: &configuration::Configuration, invoices_document_id: &str) -> Result<models::invoices_2024_06_19::GetInvoicesDocumentResponse, Error<GetInvoicesDocumentError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_invoices_document_id = invoices_document_id;
 
@@ -374,7 +374,7 @@ pub async fn get_invoices_document(configuration: &configuration::Configuration,
 }
 
 /// Returns invoice export details (including the `exportDocumentId`, if available) for the export that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 15 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoices_export(configuration: &configuration::Configuration, export_id: &str) -> Result<models::invoices_api_model_2024_06_19::GetInvoicesExportResponse, Error<GetInvoicesExportError>> {
+pub async fn get_invoices_export(configuration: &configuration::Configuration, export_id: &str) -> Result<models::invoices_2024_06_19::GetInvoicesExportResponse, Error<GetInvoicesExportError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_export_id = export_id;
 
@@ -411,7 +411,7 @@ pub async fn get_invoices_export(configuration: &configuration::Configuration, e
 }
 
 /// Returns invoice exports details for exports that match the filters that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 0.1 | 20 |  The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits that were applied to the requested operation, when available. The preceding table indicates the default rate and burst values for this operation. Selling partners whose business demands require higher throughput may have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits in the Selling Partner API](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
-pub async fn get_invoices_exports(configuration: &configuration::Configuration, marketplace_id: &str, date_start: Option<String>, next_token: Option<&str>, page_size: Option<i32>, date_end: Option<String>, status: Option<&str>) -> Result<models::invoices_api_model_2024_06_19::GetInvoicesExportsResponse, Error<GetInvoicesExportsError>> {
+pub async fn get_invoices_exports(configuration: &configuration::Configuration, marketplace_id: &str, date_start: Option<String>, next_token: Option<&str>, page_size: Option<i32>, date_end: Option<String>, status: Option<&str>) -> Result<models::invoices_2024_06_19::GetInvoicesExportsResponse, Error<GetInvoicesExportsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_marketplace_id = marketplace_id;
     let p_date_start = date_start;

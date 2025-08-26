@@ -30,7 +30,7 @@ pub struct Export {
     #[serde(rename = "invoicesDocumentIds", skip_serializing_if = "Option::is_none")]
     pub invoices_document_ids: Option<Vec<String>>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
-    pub status: Option<models::invoices_api_model_2024_06_19::ExportStatus>,
+    pub status: Option<models::invoices_2024_06_19::ExportStatus>,
 }
 
 impl Export {

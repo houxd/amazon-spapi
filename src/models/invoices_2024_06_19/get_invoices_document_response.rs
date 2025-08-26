@@ -11,19 +11,18 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// ErrorList : A list of error responses that are returned when a request is unsuccessful.
+/// GetInvoicesDocumentResponse : Success.
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ErrorList {
-    /// List of errors.
-    #[serde(rename = "errors")]
-    pub errors: Vec<models::invoices_api_model_2024_06_19::Error>,
+pub struct GetInvoicesDocumentResponse {
+    #[serde(rename = "invoicesDocument", skip_serializing_if = "Option::is_none")]
+    pub invoices_document: Option<Box<models::invoices_2024_06_19::InvoicesDocument>>,
 }
 
-impl ErrorList {
-    /// A list of error responses that are returned when a request is unsuccessful.
-    pub fn new(errors: Vec<models::invoices_api_model_2024_06_19::Error>) -> ErrorList {
-        ErrorList {
-            errors,
+impl GetInvoicesDocumentResponse {
+    /// Success.
+    pub fn new() -> GetInvoicesDocumentResponse {
+        GetInvoicesDocumentResponse {
+            invoices_document: None,
         }
     }
 }

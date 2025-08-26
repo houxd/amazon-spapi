@@ -35,7 +35,7 @@ pub mod listings_items_2020_09_01;
 pub mod fba_inventory;
 pub mod orders_v0;
 pub mod vendor_transaction_status;
-pub mod invoices_api_model_2024_06_19;
+pub mod invoices_2024_06_19;
 pub mod merchant_fulfillment_v0;
 pub mod vendor_shipments;
 pub mod feeds_2021_06_30;

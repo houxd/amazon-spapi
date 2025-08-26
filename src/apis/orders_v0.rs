@@ -135,6 +135,20 @@ pub enum UpdateVerificationStatusError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`update_shipment_status`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateShipmentStatusError {
+    Status400(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status403(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status404(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status413(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status415(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status429(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status500(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    Status503(models::orders_v0::UpdateShipmentStatusErrorResponse),
+    UnknownValue(serde_json::Value),
+}
 
 /// Updates the shipment confirmation status for a specified order.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 2 | 10 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
 pub async fn confirm_shipment(configuration: &configuration::Configuration, order_id: &str, payload: models::orders_v0::ConfirmShipmentRequest) -> Result<(), Error<ConfirmShipmentError>> {
@@ -565,3 +579,30 @@ pub async fn update_verification_status(configuration: &configuration::Configura
     }
 }
 
+/// Update the shipment status for an order that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 5 | 15 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
+pub async fn update_shipment_status(configuration: &configuration::Configuration, order_id: &str, payload: models::orders_v0::UpdateShipmentStatusRequest) -> Result<(), Error<UpdateShipmentStatusError>> {
+    // add a prefix to parameters to efficiently prevent name collisions
+    let p_order_id = order_id;
+    let p_payload = payload;
+
+    let uri_str = format!("{}/orders/v0/orders/{orderId}/shipment", configuration.base_path, orderId=crate::apis::urlencode(p_order_id));
+    let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
+
+    if let Some(ref user_agent) = configuration.user_agent {
+        req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());
+    }
+    req_builder = req_builder.json(&p_payload);
+
+    let req = req_builder.build()?;
+    let resp = configuration.client.execute(req).await?;
+
+    let status = resp.status();
+
+    if !status.is_client_error() && !status.is_server_error() {
+        Ok(())
+    } else {
+        let content = resp.text().await?;
+        let entity: Option<UpdateShipmentStatusError> = serde_json::from_str(&content).ok();
+        Err(Error::ResponseError(ResponseContent { status, content, entity }))
+    }
+}

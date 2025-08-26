@@ -16,16 +16,16 @@ use serde::{Deserialize, Serialize};
 pub struct InvoicesAttributes {
     /// A list of all the options that are available for the invoice status attribute.
     #[serde(rename = "invoiceStatusOptions", skip_serializing_if = "Option::is_none")]
-    pub invoice_status_options: Option<Vec<models::invoices_api_model_2024_06_19::AttributeOption>>,
+    pub invoice_status_options: Option<Vec<models::invoices_2024_06_19::AttributeOption>>,
     /// A list of all the options that are available for the invoice type attribute.
     #[serde(rename = "invoiceTypeOptions", skip_serializing_if = "Option::is_none")]
-    pub invoice_type_options: Option<Vec<models::invoices_api_model_2024_06_19::AttributeOption>>,
+    pub invoice_type_options: Option<Vec<models::invoices_2024_06_19::AttributeOption>>,
     /// A list of all the options that are available for the transaction identifier name attribute.
     #[serde(rename = "transactionIdentifierNameOptions", skip_serializing_if = "Option::is_none")]
-    pub transaction_identifier_name_options: Option<Vec<models::invoices_api_model_2024_06_19::AttributeOption>>,
+    pub transaction_identifier_name_options: Option<Vec<models::invoices_2024_06_19::AttributeOption>>,
     /// A list of all the options that are available for the transaction type attribute.
     #[serde(rename = "transactionTypeOptions", skip_serializing_if = "Option::is_none")]
-    pub transaction_type_options: Option<Vec<models::invoices_api_model_2024_06_19::AttributeOption>>,
+    pub transaction_type_options: Option<Vec<models::invoices_2024_06_19::AttributeOption>>,
 }
 
 impl InvoicesAttributes {

@@ -54,8 +54,7 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_order_buyer_info", 0.5, 30)
             .await?;
-        let res =
-            crate::apis::orders_v0::get_order_buyer_info(&configuration, order_id).await?;
+        let res = crate::apis::orders_v0::get_order_buyer_info(&configuration, order_id).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -71,8 +70,8 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/get_order_items", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0::get_order_items(&configuration, order_id, next_token)
-            .await?;
+        let res =
+            crate::apis::orders_v0::get_order_items(&configuration, order_id, next_token).await?;
         guard.mark_response().await;
         Ok(res)
     }
@@ -186,12 +185,26 @@ impl SpapiClient {
             .limiter()
             .wait("orders_v0/update_verification_status", 0.5, 30)
             .await?;
-        let res = crate::apis::orders_v0::update_verification_status(
-            &configuration,
-            order_id,
-            payload,
-        )
-        .await?;
+        let res =
+            crate::apis::orders_v0::update_verification_status(&configuration, order_id, payload)
+                .await?;
+        guard.mark_response().await;
+        Ok(res)
+    }
+
+    /// Update the shipment status for an order that you specify.  **Usage Plan:**  | Rate (requests per second) | Burst | | ---- | ---- | | 5 | 15 |  The `x-amzn-RateLimit-Limit` response header contains the usage plan rate limits for the operation, when available. The preceding table contains the default rate and burst values for this operation. Selling partners whose business demands require higher throughput might have higher rate and burst values than those shown here. For more information, refer to [Usage Plans and Rate Limits](https://developer-docs.amazon.com/sp-api/docs/usage-plans-and-rate-limits-in-the-sp-api).
+    pub async fn update_shipment_status(
+        &self,
+        order_id: &str,
+        payload: models::orders_v0::UpdateShipmentStatusRequest,
+    ) -> Result<()> {
+        let configuration = self.create_configuration().await?;
+        let guard = self
+            .limiter()
+            .wait("orders_v0/update_shipment_status", 5.0, 15)
+            .await?;
+        let res = crate::apis::orders_v0::update_shipment_status(&configuration, order_id, payload)
+            .await?;
         guard.mark_response().await;
         Ok(res)
     }
