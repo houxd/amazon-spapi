@@ -7,10 +7,8 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
 
+use crate::client::{AuthClient, RateLimiter, Region, SpapiConfig};
 use crate::apis::configuration::Configuration;
-use crate::client::{AuthClient, RateLimiter, SpapiConfig};
-
-// use amazon_spapi_gen::apis::configuration::Configuration;
 
 pub struct SpapiClient {
     client: Client,
@@ -70,10 +68,18 @@ impl SpapiClient {
 
     /// Get the base URL for the client
     pub fn get_base_url(&self) -> String {
-        if self.config.sandbox {
-            format!("https://sandbox.sellingpartnerapi-na.amazon.com")
+        if self.config.sandbox.unwrap_or(false) {
+            match self.config.region {
+                Region::NorthAmerica => format!("https://sandbox.sellingpartnerapi-na.amazon.com"),
+                Region::Europe => format!("https://sandbox.sellingpartnerapi-eu.amazon.com"),
+                Region::FarEast => format!("https://sandbox.sellingpartnerapi-fe.amazon.com"),
+            }
         } else {
-            format!("https://sellingpartnerapi-na.amazon.com")
+            match self.config.region {
+                Region::NorthAmerica => format!("https://sellingpartnerapi-na.amazon.com"),
+                Region::Europe => format!("https://sellingpartnerapi-eu.amazon.com"),
+                Region::FarEast => format!("https://sellingpartnerapi-fe.amazon.com"),
+            }
         }
     }
 
@@ -85,7 +91,7 @@ impl SpapiClient {
 
     /// Check if the client is in sandbox mode
     pub fn is_sandbox(&self) -> bool {
-        self.config.sandbox
+        self.config.sandbox.unwrap_or(false)
     }
 
     /// Upload content to the feed document URL (direct S3 upload)

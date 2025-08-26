@@ -10,6 +10,7 @@ pub mod feeds_2021_06_30;
 pub mod product_fees_v0;
 pub mod fulfillment_inbound_2024_03_20;
 pub mod fulfillment_inbound_v0;
+pub mod listings_items_2020_09_01;
 pub mod listings_items_2021_08_01;
 pub mod listings_restrictions_2021_08_01;
 pub mod merchant_fulfillment_v0;

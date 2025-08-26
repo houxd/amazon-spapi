@@ -94,7 +94,7 @@ async fn update_listing_price(
     println!("{:#?}", patch_request);
 
     client
-        .patch_listings_item(
+        .patch_listings_item_2021_08_01(
             seller_id,
             sku,
             marketplace_ids.to_vec(),
