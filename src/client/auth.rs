@@ -3,6 +3,8 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+use crate::client::{SpapiClient, SpapiConfig};
+
 #[derive(Debug, Serialize)]
 pub struct LwaTokenRequest {
     pub grant_type: String,
@@ -26,23 +28,35 @@ pub struct CachedToken {
 
 pub struct AuthClient {
     client: Client,
-    client_id: String,
-    client_secret: String,
-    refresh_token: String,
+    config: SpapiConfig,
     cached_token: Option<CachedToken>,
 }
 
 impl AuthClient {
-    pub fn new(client_id: String, client_secret: String, refresh_token: String, user_agent: &String) -> Result<Self> {
-        let client = Client::builder()
-            .timeout(Duration::from_secs(30))
-            .user_agent(user_agent)
-            .build()?;
+    pub fn new(config: SpapiConfig) -> Result<Self> {
+        let user_agent = if let Some(ua) = &config.user_agent {
+            ua.clone()
+        } else {
+            // Default user agent if not provided
+            SpapiClient::get_default_user_agent()
+        };
+
+        let mut client_builder = Client::builder()
+            .timeout(std::time::Duration::from_secs(
+                config.timeout_sec.unwrap_or(30),
+            ))
+            .user_agent(&user_agent);
+
+        if let Some(proxy_url) = &config.proxy {
+            let proxy = reqwest::Proxy::all(proxy_url)?;
+            client_builder = client_builder.proxy(proxy);
+        }
+
+        let client = client_builder.build()?;
+
         Ok(Self {
-            client, //: Client::new(),
-            client_id,
-            client_secret,
-            refresh_token,
+            client,
+            config,
             cached_token: None,
         })
     }
@@ -83,9 +97,9 @@ impl AuthClient {
 
         let request_body = LwaTokenRequest {
             grant_type: "refresh_token".to_string(),
-            client_id: self.client_id.clone(),
-            client_secret: self.client_secret.clone(),
-            refresh_token: self.refresh_token.clone(),
+            client_id: self.config.client_id.clone(),
+            client_secret: self.config.client_secret.clone(),
+            refresh_token: self.config.refresh_token.clone(),
         };
 
         log::debug!("Request Body: {:?}", request_body);

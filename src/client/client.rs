@@ -7,8 +7,8 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
 
-use crate::client::{AuthClient, RateLimiter, Region, SpapiConfig};
 use crate::apis::configuration::Configuration;
+use crate::client::{AuthClient, RateLimiter, Region, SpapiConfig};
 
 pub struct SpapiClient {
     client: Client,
@@ -24,25 +24,27 @@ impl SpapiClient {
             ua.clone()
         } else {
             // Default user agent if not provided
-            Self::get_user_agent()
+            Self::get_default_user_agent()
         };
 
-        let client = Client::builder()
+        let mut client_builder = Client::builder()
             .timeout(std::time::Duration::from_secs(
                 config.timeout_sec.unwrap_or(30),
             ))
-            .user_agent(&user_agent)
-            .build()?;
+            .user_agent(&user_agent);
 
-        let auth_client = AuthClient::new(
-            config.client_id.clone(),
-            config.client_secret.clone(),
-            config.refresh_token.clone(),
-            &user_agent,
-        )?;
+        if let Some(proxy_url) = &config.proxy {
+            let proxy = reqwest::Proxy::all(proxy_url)?;
+            client_builder = client_builder.proxy(proxy);
+        }
+
+        let client = client_builder.build()?;
+
+        let auth_client = AuthClient::new(config.clone())?;
 
         // Initialize rate limiter if enabled
-        let rate_limiter = RateLimiter::new_with_safety_factor(config.rate_limit_factor.unwrap_or(1.05));
+        let rate_limiter =
+            RateLimiter::new_with_safety_factor(config.rate_limit_factor.unwrap_or(1.05));
 
         Ok(Self {
             client, //: Client::new(),
@@ -52,12 +54,13 @@ impl SpapiClient {
         })
     }
 
+    /// Get a reference to the rate limiter
     pub fn limiter(&self) -> &RateLimiter {
         &self.rate_limiter
     }
 
     /// Get default user agent for the client
-    pub fn get_user_agent() -> String {
+    pub fn get_default_user_agent() -> String {
         let platform = format!("{}/{}", std::env::consts::OS, std::env::consts::ARCH);
         format!(
             "amazon-spapi/v{} (Language=Rust; Platform={})",
@@ -68,7 +71,7 @@ impl SpapiClient {
 
     /// Get the base URL for the client
     pub fn get_base_url(&self) -> String {
-        if self.config.sandbox.unwrap_or(false) {
+        if self.config.sandbox {
             match self.config.region {
                 Region::NorthAmerica => format!("https://sandbox.sellingpartnerapi-na.amazon.com"),
                 Region::Europe => format!("https://sandbox.sellingpartnerapi-eu.amazon.com"),
@@ -91,7 +94,7 @@ impl SpapiClient {
 
     /// Check if the client is in sandbox mode
     pub fn is_sandbox(&self) -> bool {
-        self.config.sandbox.unwrap_or(false)
+        self.config.sandbox
     }
 
     /// Upload content to the feed document URL (direct S3 upload)
@@ -206,16 +209,30 @@ impl SpapiClient {
             self.config
                 .user_agent
                 .clone()
-                .unwrap_or_else(|| Self::get_user_agent())
+                .unwrap_or_else(|| Self::get_default_user_agent())
                 .parse()?,
         );
 
-        let http_client = reqwest::Client::builder()
+        let user_agent = if let Some(ua) = &self.config.user_agent {
+            ua.clone()
+        } else {
+            // Default user agent if not provided
+            Self::get_default_user_agent()
+        };
+
+        let mut client_builder = Client::builder()
             .timeout(std::time::Duration::from_secs(
                 self.config.timeout_sec.unwrap_or(30),
             ))
             .default_headers(headers)
-            .build()?;
+            .user_agent(&user_agent);
+
+        if let Some(proxy_url) = &self.config.proxy {
+            let proxy = reqwest::Proxy::all(proxy_url)?;
+            client_builder = client_builder.proxy(proxy);
+        }
+
+        let http_client = client_builder.build()?;
 
         let configuration = Configuration {
             base_path: self.get_base_url(),
@@ -224,7 +241,7 @@ impl SpapiClient {
                 self.config
                     .user_agent
                     .clone()
-                    .unwrap_or_else(|| Self::get_user_agent()),
+                    .unwrap_or_else(|| Self::get_default_user_agent()),
             ),
         };
         Ok(configuration)

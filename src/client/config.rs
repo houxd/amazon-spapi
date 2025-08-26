@@ -14,13 +14,15 @@ pub struct SpapiConfig {
     /// The AWS region for the Selling Partner API.
     pub region: Region,
     /// Whether to use the sandbox environment.
-    pub sandbox: Option<bool>,
+    pub sandbox: bool,
     /// Custom user agent string. If not set, a default user agent will be used.
     pub user_agent: Option<String>,
     /// Request timeout in seconds. Defaults to 30 seconds if not set.
     pub timeout_sec: Option<u64>,
     /// Rate limit safety factor. Defaults to 1.1 if not set.
     pub rate_limit_factor: Option<f64>,
+    /// Optional proxy URL for routing requests through a proxy server. 
+    pub proxy: Option<String>,
 }
 
 /// AWS Region for the Selling Partner API.
@@ -78,10 +80,11 @@ impl SpapiConfig {
             client_secret,
             refresh_token,
             region: Region::from_str(&region)?,
-            sandbox: Some(sandbox),
+            sandbox,
             user_agent: None,
             timeout_sec: Some(30),
             rate_limit_factor: None,
+            proxy: None,
         })
     }
 

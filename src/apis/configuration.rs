@@ -1,8 +1,6 @@
 use reqwest::{Client, Request, Response, Error};
 use std::{cell::RefCell, ops::Deref};
 
-use crate::client::{RateLimitGuard, SpapiClient};
-
 #[derive(Debug, Clone)]
 pub struct CustomClient {
     inner: Client,

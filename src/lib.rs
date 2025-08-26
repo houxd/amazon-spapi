@@ -1,13 +1,7 @@
 #![allow(unused_imports)]
 #![allow(clippy::too_many_arguments)]
 
-#![allow(unused)]
-pub mod region {
-    pub static NA: &str = "na";
-    pub static EU: &str = "eu";
-    pub static FE: &str = "fe";
-}
-
+/// Marketplace IDs
 #[allow(unused)]
 pub mod marketplace_ids {
     // North America
@@ -38,6 +32,7 @@ pub mod marketplace_ids {
     pub static JP: &str = "A1VC38T7YXB528";
 }
 
+/// Locale codes
 #[allow(unused)]
 pub mod locale {
     pub static EN_US: &str = "en_US";
