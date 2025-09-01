@@ -236,7 +236,7 @@ impl SpapiClient {
 
         let configuration = Configuration {
             base_path: self.get_base_url(),
-            client: crate::apis::configuration::CustomClient::new(http_client),
+            client: crate::apis::configuration::CustomClient::new(http_client, self.config.retry_count.unwrap_or(0)),
             user_agent: Some(
                 self.config
                     .user_agent

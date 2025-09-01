@@ -23,6 +23,8 @@ pub struct SpapiConfig {
     pub rate_limit_factor: Option<f64>,
     /// Optional proxy URL for routing requests through a proxy server. 
     pub proxy: Option<String>,
+    /// Number of retry attempts for requests that receive a 429 status code. None or 0 means no retries.
+    pub retry_count: Option<usize>,
 }
 
 /// AWS Region for the Selling Partner API.
@@ -85,6 +87,7 @@ impl SpapiConfig {
             timeout_sec: Some(30),
             rate_limit_factor: None,
             proxy: None,
+            retry_count: None,
         })
     }
 
