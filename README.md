@@ -22,23 +22,21 @@ First, set up your Amazon SP-API credentials as environment variables:
 export SPAPI_CLIENT_ID="your_client_id"
 export SPAPI_CLIENT_SECRET="your_client_secret"
 export SPAPI_REFRESH_TOKEN="your_refresh_token"
+export SPAPI_REGION="us-east-1"
 export SPAPI_SANDBOX="false"  # or "true" for sandbox environment
 ```
 
 ### 2. Basic Usage
 
 ```rust
-use amazon_spapi::{
-    client::{SpapiClient, SpapiConfig},
-    models::fba_inventory::InventorySummary,
-};
+use amazon_spapi::client::{SpapiClient, SpapiConfig};
 use anyhow::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     // Create client from environment variables
     let client = SpapiClient::new(SpapiConfig::from_env()?)?;
-    
+
     // Get FBA inventory summaries
     let inventory = client
         .get_inventory_summaries(
@@ -52,7 +50,7 @@ async fn main() -> Result<()> {
             None,
         )
         .await?;
-    
+
     println!("Inventory summaries: {:?}", inventory);
     Ok(())
 }
